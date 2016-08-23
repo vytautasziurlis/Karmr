@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/packages
+/ConsoleApplication1/bin/Debug
+/ConsoleApplication1/obj/Debug
+/Karmr.DomainUnitTests/obj/Debug
+/Karmr.DomainUnitTests/bin/Debug
+/Karmr.Domain/obj/Debug
+/Karmr.Domain/bin/Debug
+/Karmr.Contracts/obj/Debug
+/Karmr.Contracts/bin/Debug
+*.suo

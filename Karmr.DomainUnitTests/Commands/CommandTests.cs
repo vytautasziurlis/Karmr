@@ -1,15 +1,17 @@
-﻿using Karmr.Domain.Commands;
-using NUnit.Framework;
-using System.Linq;
-using System.Reflection;
-using Karmr.DomainUnitTests.Helpers;
-using Karmr.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using Karmr.Contracts.Commands;
-
-namespace Karmr.DomainUnitTests
+﻿namespace Karmr.DomainUnitTests.Commands
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
+    using Karmr.Contracts.Commands;
+    using Karmr.Domain.Commands;
+    using Karmr.Domain.Entities;
+    using Karmr.DomainUnitTests.Helpers;
+
+    using NUnit.Framework;
+
     [TestFixture]
     public class CommandTests
     {
@@ -28,7 +30,7 @@ namespace Karmr.DomainUnitTests
 
             Assembly.GetAssembly(typeof(Command)).GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(Command))).ToList()
-                .ForEach(x => AssertCommandIsHandledByOnlyOneEntity(x, allAggregateTypes));
+                .ForEach(x => this.AssertCommandIsHandledByOnlyOneEntity(x, allAggregateTypes));
         }
 
         private void AssertCommandIsHandledByOnlyOneEntity(Type commandType, List<Type> aggregateType)
@@ -44,7 +46,7 @@ namespace Karmr.DomainUnitTests
             try
             {
                 var entity = Activator.CreateInstance(aggregateType) as Aggregate;
-                var handled = entity.Handle(Activator.CreateInstance(commandType) as ICommand);
+                entity.Handle(Activator.CreateInstance(commandType) as ICommand);
                 return false;
             }
             catch(UnhandledCommandException)

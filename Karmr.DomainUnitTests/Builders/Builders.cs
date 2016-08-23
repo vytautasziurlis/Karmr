@@ -32,7 +32,7 @@ namespace Karmr.DomainUnitTests.Builders
         }
     }
 
-    internal abstract class CommandBuilder<T> where T : Command
+    internal class CommandBuilder<T> where T : Command
     {
         protected T command;
 
@@ -41,20 +41,14 @@ namespace Karmr.DomainUnitTests.Builders
             this.command = (T)Activator.CreateInstance(typeof(T));
         }
 
-        internal abstract CommandBuilder<T> With(Action<T> action);
+        //internal CommandBuilder<T> With(Action<T> action)
+        //{
+            
+        //}
 
         internal T Build()
         {
             return this.command;
-        }
-    }
-
-    internal class CommandBuilder1 : CommandBuilder<CreateListingCommand>
-    {
-        internal override CommandBuilder<CreateListingCommand> With(Action<CreateListingCommand> action)
-        {
-            action(this.command);
-            return this;
         }
     }
 }
