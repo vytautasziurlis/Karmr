@@ -1,47 +1,48 @@
 ﻿using Karmr.Contracts.Commands;
 using Karmr.Domain.Commands;
 using Karmr.Domain.Helpers;
-using System;
+
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace Karmr.Domain.Entities
 {
-    public abstract class Aggregate
+    using Karmr.Domain.Infrastructure;
+
+    internal abstract class Aggregate
     {
         private const BindingFlags BindingAttr = BindingFlags.NonPublic
             | BindingFlags.Instance
             | BindingFlags.DeclaredOnly;
 
-        private IList<Command> Commands
+        protected readonly IList<Command> commands  = new List<Command>();
+
+        internal IEnumerable<ICommand> GetCommands()
         {
-            get;
-            set;
+            return this.commands;
         }
 
-        public IEnumerable<ICommand> GetCommands()
+        protected Aggregate()
         {
-            return this.Commands;
         }
 
-        public Aggregate()
+        protected Aggregate(IEnumerable<ICommand> commands)
         {
-            this.Commands = new List<Command>();
-        }
-
-        public bool Handle(ICommand command)
-        {
-            if (this.HandleImpl(command))
+            foreach (var command in commands)
             {
-                this.Commands.Add(command as Command);
-                return true;
+                this.Handle(command);
             }
-            return false;
         }
 
-        private bool HandleImpl(ICommand command)
+        internal void Handle(ICommand command)
         {
-            var handleMethod = this.GetType().GetMethodBySignature(typeof(bool),
+            this.HandleImpl(command);
+            this.commands.Add(command as Command);
+        }
+
+        private void HandleImpl(ICommand command)
+        {
+            var handleMethod = this.GetType().GetMethodBySignature(typeof(void),
                 new[] { command.GetType() },
                 BindingAttr);
 
@@ -51,8 +52,7 @@ namespace Karmr.Domain.Entities
                     string.Format("Handle for command {0} not found on entity {1}",
                     command.GetType(), this.GetType()));
             }
-            var result = handleMethod.Invoke(this, new[] { command });
-            return Convert.ToBoolean(result);
+            handleMethod.Invoke(this, new[] { command });
         }
     }
 }

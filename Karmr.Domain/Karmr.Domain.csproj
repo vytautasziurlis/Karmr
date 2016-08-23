@@ -41,17 +41,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\CreateListingCommand.cs" />
     <Compile Include="Commands\UpdateListingCommand.cs" />
     <Compile Include="Entities\Aggregate.cs" />
     <Compile Include="Entities\Listing.cs" />
-    <Compile Include="Entities\UnhandledCommandException.cs" />
+    <Compile Include="Infrastructure\UnhandledCommandException.cs" />
     <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Karmr.Contracts\Karmr.Contracts.csproj">
       <Project>{4a4033a0-db64-4de9-a14d-ad9450b1acd7}</Project>

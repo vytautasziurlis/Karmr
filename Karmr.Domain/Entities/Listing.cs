@@ -2,24 +2,33 @@
 
 namespace Karmr.Domain.Entities
 {
-    public class Listing : Aggregate
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Contracts.Commands;
+
+    internal class Listing : Aggregate
     {
-        public string Description { get; private set; }
+        internal string Description { get; private set; }
 
-        public Listing() : base()
+        internal Listing() { }
+
+        internal Listing(IEnumerable<ICommand> commands) : base(commands) { }
+
+        private void Handle(CreateListingCommand command)
         {
+            if (this.commands.Any())
+            {
+                throw new Exception(string.Format("Expected empty list of commands, found {0} commands", this.commands.Count));
+            }
+
+            this.Description = command.Description;
         }
 
-        internal bool Handle(CreateListingCommand command)
+        private void Handle(UpdateListingCommand command)
         {
             this.Description = command.Description;
-            return true;
-        }
-
-        internal bool Handle(UpdateListingCommand command)
-        {
-            this.Description = command.Description;
-            return true;
         }
     }
 }

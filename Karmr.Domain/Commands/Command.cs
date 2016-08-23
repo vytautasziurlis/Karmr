@@ -2,7 +2,7 @@
 
 namespace Karmr.Domain.Commands
 {
-    public class Command : ICommand
+    public abstract class Command : ICommand
     {
         public long Sequence { get; }
 

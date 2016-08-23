@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Karmr.Domain.Helpers
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static MethodInfo GetMethodBySignature(this Type type, Type returnType, IEnumerable<Type> parameterTypes, BindingFlags bindingAttr)
         {

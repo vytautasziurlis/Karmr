@@ -17,6 +17,8 @@ namespace ConsoleApplication1
                 new Listing().Apply(@event);
             }
             Console.ReadKey();
+
+            //Karmr.Domain.Commands.
         }
     }
 

@@ -8,6 +8,7 @@
     using Karmr.Contracts.Commands;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Entities;
+    using Karmr.Domain.Infrastructure;
     using Karmr.DomainUnitTests.Helpers;
 
     using NUnit.Framework;
@@ -45,7 +46,8 @@
         {
             try
             {
-                var entity = Activator.CreateInstance(aggregateType) as Aggregate;
+                var bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
+                var entity = Activator.CreateInstance(aggregateType, bindingFlags, null, new object[] { }, null) as Aggregate;
                 entity.Handle(Activator.CreateInstance(commandType) as ICommand);
                 return false;
             }

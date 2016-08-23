@@ -52,11 +52,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\ListingTests.cs" />
+    <Compile Include="Aggregates\ListingTests.cs" />
     <Compile Include="Builders\Builders.cs" />
     <Compile Include="Helpers\TypeExtensionTests.cs" />
     <Compile Include="Commands\CommandTests.cs" />
-    <Compile Include="Entities\AggregateTests.cs" />
+    <Compile Include="Aggregates\AggregateTests.cs" />
     <Compile Include="Helpers\TypeAssert.cs" />
     <Compile Include="Helpers\TypeAssertTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

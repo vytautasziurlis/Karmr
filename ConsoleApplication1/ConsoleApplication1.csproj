@@ -49,6 +49,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Karmr.Contracts\Karmr.Contracts.csproj">
+      <Project>{4a4033a0-db64-4de9-a14d-ad9450b1acd7}</Project>
+      <Name>Karmr.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Karmr.Domain\Karmr.Domain.csproj">
+      <Project>{cb54ae4c-8ae3-4c6b-8241-bf87849be923}</Project>
+      <Name>Karmr.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

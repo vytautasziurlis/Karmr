@@ -4,6 +4,10 @@ using System;
 
 namespace Karmr.DomainUnitTests.Builders
 {
+    using Karmr.Contracts;
+
+    using Moq;
+
     internal static class Builder
     {
         internal static AggregateBuilder<T> Aggregate<T>() where T: Aggregate
@@ -23,7 +27,7 @@ namespace Karmr.DomainUnitTests.Builders
 
         internal AggregateBuilder()
         {
-            this.aggregate = (T)Activator.CreateInstance(typeof(T));
+            this.aggregate = (T)Activator.CreateInstance(typeof(T), Mock.Of<ICommandRepository>());
         }
 
         internal T Build()
