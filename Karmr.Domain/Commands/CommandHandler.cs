@@ -10,6 +10,7 @@ namespace Karmr.Domain.Commands
     using Karmr.Contracts.Commands;
     using Karmr.Domain.Entities;
     using Helpers;
+    using Infrastructure;
 
     public sealed class CommandHandler
     {
@@ -28,13 +29,7 @@ namespace Karmr.Domain.Commands
 
         public void Handle(ICommand command)
         {
-            var aggregate = this.GetAggregateInstance(command.GetType(), null);
-            this.Handle(aggregate, command);
-        }
-
-        public void Handle(ICommand command, Guid entityKey)
-        {
-            var aggregate = this.GetAggregateInstance(command.GetType(), entityKey);
+            var aggregate = this.GetAggregateInstance(command.GetType(), command.EntityKey);
             this.Handle(aggregate, command);
         }
 
@@ -44,15 +39,11 @@ namespace Karmr.Domain.Commands
             this.repository.Save(command);
         }
 
-        private Aggregate GetAggregateInstance(Type commandType, Guid? entityKey)
+        private Aggregate GetAggregateInstance(Type commandType, Guid entityKey)
         {
             var aggregateType = this.GetAggregateType(commandType);
-            var @params = new object[] { };
-            if (entityKey.HasValue)
-            {
-                @params = new object[] { this.repository.Get(aggregateType, entityKey.Value) };
-            }
-            
+            var @params = new object[] { this.repository.Get(aggregateType, entityKey) };
+
             return Activator.CreateInstance(aggregateType, this.BindingFlags, null, @params, null) as Aggregate;
         }
 
@@ -66,7 +57,7 @@ namespace Karmr.Domain.Commands
 
                 if (aggregateType == null)
                 {
-                    throw new Exception(string.Format("Could not find aggregate to handle command {0}", commandType));
+                    throw new UnhandledCommandException(string.Format("Could not find aggregate to handle command {0}", commandType));
                 }
 
                 this.commandAggregates.Add(commandType, aggregateType);

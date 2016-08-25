@@ -20,7 +20,7 @@ namespace Karmr.DomainUnitTests.Aggregates
         [Test]
         public void HandlingCommandUpdatesCommands()
         {
-            var subject = this.GetSubject(x => true);
+            var subject = this.GetSubject(x => { });
             var command1 = new ConcreteCommand();
             var commands = this.HandleCommand(subject, command1).ToList();
             Assert.AreEqual(1, commands.Count);
@@ -36,7 +36,7 @@ namespace Karmr.DomainUnitTests.Aggregates
         [Test]
         public void HandlingFalsyCommandDoesNotChangeState()
         {
-            var subject = this.GetSubject(x => false);
+            var subject = this.GetSubject(x => { });
             subject.Handle(new ConcreteCommand());
             Assert.IsEmpty(subject.GetCommands());
         }
@@ -54,16 +54,16 @@ namespace Karmr.DomainUnitTests.Aggregates
             return aggregate.GetCommands();
         }
 
-        private ConcreteAggregate GetSubject(Func<Command, bool> func)
+        private ConcreteAggregate GetSubject(Action<Command> func)
         {
             return new ConcreteAggregate(func);
         }
 
         private class ConcreteAggregate : Aggregate
         {
-            private Func<Command, bool> HandleFunc { get; }
+            private Action<Command> HandleFunc { get; }
 
-            public ConcreteAggregate(Func<Command, bool> func)
+            public ConcreteAggregate(Action<Command> func)
             {
                 this.HandleFunc = func;
             }
@@ -74,8 +74,6 @@ namespace Karmr.DomainUnitTests.Aggregates
             }
         }
 
-        private class ConcreteCommand : Command
-        {
-        }
+        private class ConcreteCommand : Command { }
     }
 }
