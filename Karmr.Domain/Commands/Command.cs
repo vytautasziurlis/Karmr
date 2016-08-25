@@ -5,7 +5,7 @@ namespace Karmr.Domain.Commands
 {
     public abstract class Command : ICommand
     {
-        public Guid EntityKey { get; }
+        public Guid EntityKey { get; protected set; }
 
         public long Sequence { get; }
         

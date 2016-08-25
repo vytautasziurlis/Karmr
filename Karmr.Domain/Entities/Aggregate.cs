@@ -7,6 +7,8 @@ using System.Reflection;
 
 namespace Karmr.Domain.Entities
 {
+    using System;
+
     using Karmr.Domain.Infrastructure;
 
     internal abstract class Aggregate
@@ -48,7 +50,17 @@ namespace Karmr.Domain.Entities
                     string.Format("Handle for command {0} not found on entity {1}",
                     command.GetType(), this.GetType()));
             }
-            handleMethod.Invoke(this, new[] { command });
+
+            // invoke wrapps any exception in TargetInvocationException,
+            // to simplify debugging let's throw inner exception instead
+            try
+            {
+                handleMethod.Invoke(this, new[] { command });
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException ?? ex;
+            }
         }
     }
 }

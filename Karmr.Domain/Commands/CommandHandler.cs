@@ -33,11 +33,6 @@ namespace Karmr.Domain.Commands
         public void Handle(ICommand command)
         {
             var aggregate = this.GetAggregateInstance(command.GetType(), command.EntityKey);
-            this.Handle(aggregate, command);
-        }
-
-        private void Handle(Aggregate aggregate, ICommand command)
-        {
             aggregate.Handle(command);
             this.repository.Save(command);
         }
