@@ -22,10 +22,6 @@ namespace Karmr.Domain.Entities
             return this.commands;
         }
 
-        protected Aggregate()
-        {
-        }
-
         protected Aggregate(IEnumerable<ICommand> commands)
         {
             foreach (var command in commands)

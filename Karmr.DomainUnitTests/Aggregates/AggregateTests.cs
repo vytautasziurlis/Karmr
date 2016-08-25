@@ -63,7 +63,7 @@ namespace Karmr.DomainUnitTests.Aggregates
         {
             private Action<Command> HandleFunc { get; }
 
-            public ConcreteAggregate(Action<Command> func)
+            public ConcreteAggregate(Action<Command> func) : base(new List<ICommand>())
             {
                 this.HandleFunc = func;
             }

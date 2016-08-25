@@ -2,11 +2,12 @@
 using NUnit.Framework;
 using System.Linq;
 using Karmr.Domain.Commands;
-using Karmr.DomainUnitTests.Builders;
 
 namespace Karmr.DomainUnitTests.Aggregates
 {
-    using Karmr.Contracts;
+    using System.Collections.Generic;
+
+    using Karmr.Contracts.Commands;
 
     using Moq;
 
@@ -27,7 +28,7 @@ namespace Karmr.DomainUnitTests.Aggregates
 
         private static Listing GetSubject()
         {
-            return new Listing();
+            return new Listing(new List<ICommand>());
         }
     }
 }

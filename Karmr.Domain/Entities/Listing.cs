@@ -12,8 +12,6 @@ namespace Karmr.Domain.Entities
     {
         internal string Description { get; private set; }
 
-        internal Listing() { }
-
         internal Listing(IEnumerable<ICommand> commands) : base(commands) { }
 
         private void Handle(CreateListingCommand command)

@@ -47,7 +47,7 @@
             try
             {
                 var bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
-                var entity = Activator.CreateInstance(aggregateType, bindingFlags, null, new object[] { }, null) as Aggregate;
+                var entity = Activator.CreateInstance(aggregateType, bindingFlags, null, new object[] { new List<ICommand>() }, null) as Aggregate;
                 entity.Handle(Activator.CreateInstance(commandType) as ICommand);
                 return false;
             }

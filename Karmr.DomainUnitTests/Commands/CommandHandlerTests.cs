@@ -7,6 +7,11 @@ using Karmr.Contracts.Commands;
 
 namespace Karmr.DomainUnitTests.Commands
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Karmr.Domain.Entities;
+
     public class CommandHandlerTests
     {
         private Mock<ICommandRepository> mockRepo;
@@ -20,21 +25,58 @@ namespace Karmr.DomainUnitTests.Commands
         [Test]
         public void CommandHandlerFailsWhenHandlerAintThere()
         {
-            var subject = this.GetSubject();
+            var subject = this.GetSubject(new List<Type>());
             Assert.Throws<UnhandledCommandException>(() => subject.Handle(Mock.Of<ICommand>()));
         }
 
         [Test]
-        public void CommandHandlerCallsRepository()
+        public void CommandHandlerFailsWhenCommandIsHandlerByMultipleAggregates()
         {
-            var subject = this.GetSubject();
-
-            //subject.Handle()
+            var subject = this.GetSubject(new List<Type> { typeof(Aggregate1), typeof(Aggregate2) });
+            Assert.Throws<UnhandledCommandException>(() => subject.Handle(new DummyCommand1()));
         }
 
-        private CommandHandler GetSubject()
+        [Test]
+        public void CommandHandlerTriesToLoadAggregateCommands()
         {
-            return new CommandHandler(this.mockRepo.Object);
+            var subject = this.GetSubject(new List<Type> { typeof(Aggregate1) });
+
+            var command = new DummyCommand1();
+            subject.Handle(command);
+
+            this.mockRepo.Verify(x => x.Get(typeof(Aggregate1), command.EntityKey), Times.Once);
+        }
+
+        [Test]
+        public void CommandHandlerPersistsCommandToRepository()
+        {
+            var subject = this.GetSubject(new List<Type> { typeof(Aggregate1) });
+
+            var command = new DummyCommand1();
+            subject.Handle(command);
+
+            this.mockRepo.Verify(x => x.Save(command), Times.Once);
+        }
+
+        private CommandHandler GetSubject(IEnumerable<Type> aggregateTypes)
+        {
+            return new CommandHandler(this.mockRepo.Object, aggregateTypes);
+        }
+
+        private class DummyCommand1 : Command { }
+
+        private class Aggregate1 : Aggregate
+        {
+            private Aggregate1(IEnumerable<ICommand> commands) : base(commands) { }
+
+            private void Handle(DummyCommand1 command) { }
+        }
+
+        private class Aggregate2 : Aggregate
+        {
+            private Aggregate2(IEnumerable<ICommand> commands) : base(commands) { }
+
+            private void Handle(DummyCommand1 command) { }
         }
     }
 }

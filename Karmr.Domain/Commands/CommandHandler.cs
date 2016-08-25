@@ -20,11 +20,14 @@ namespace Karmr.Domain.Commands
 
         private readonly ICommandRepository repository;
 
+        private readonly IEnumerable<Type> aggregateTypes;
+
         private readonly Dictionary<Type, Type> commandAggregates = new Dictionary<Type, Type>();
 
-        public CommandHandler(ICommandRepository repository)
+        public CommandHandler(ICommandRepository repository, IEnumerable<Type> aggregateTypes)
         {
             this.repository = repository;
+            this.aggregateTypes = aggregateTypes;
         }
 
         public void Handle(ICommand command)
@@ -51,16 +54,19 @@ namespace Karmr.Domain.Commands
         {
             if (!this.commandAggregates.ContainsKey(commandType))
             {
-                var aggregateType = Assembly.GetAssembly(typeof(Aggregate)).GetTypes()
+                var mathingAggregateTypes = this.aggregateTypes
                     .Where(t => t.IsSubclassOf(typeof(Aggregate))).ToList()
-                    .FirstOrDefault(t => t.GetMethodBySignature(typeof(void), new[] { commandType }, this.BindingFlags) != null);
+                    .Where(t => t.GetMethodBySignature(typeof(void), new[] { commandType }, this.BindingFlags) != null)
+                    .ToList();
 
-                if (aggregateType == null)
+                if (mathingAggregateTypes.Count != 1)
                 {
-                    throw new UnhandledCommandException(string.Format("Could not find aggregate to handle command {0}", commandType));
+                    throw new UnhandledCommandException(string.Format("Excepted exatly one aggregate to handle command {0}, found {1} instead.",
+                        commandType,
+                        this.aggregateTypes.Count()));
                 }
 
-                this.commandAggregates.Add(commandType, aggregateType);
+                this.commandAggregates.Add(commandType, mathingAggregateTypes.First());
             }
             return this.commandAggregates[commandType];
         }
