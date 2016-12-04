@@ -9,6 +9,7 @@ namespace Karmr.DomainUnitTests.Aggregates
     using System.Collections.Generic;
 
     using Karmr.Contracts.Commands;
+    using Builders;
 
     public class ListingTests
     {
@@ -17,7 +18,7 @@ namespace Karmr.DomainUnitTests.Aggregates
         {
             var subject = this.GetSubject();
 
-            var command = new CreateListingCommand("description");
+            var command = new CommandBuilder<CreateListingCommand>().Build();
             subject.Handle(command);
 
             Assert.Throws<Exception>(() => subject.Handle(command));
@@ -27,7 +28,7 @@ namespace Karmr.DomainUnitTests.Aggregates
         public void ListingHandlesCreateCommand()
         {
             var listing = this.GetSubject();
-            var command = new CreateListingCommand("description");
+            var command = new CommandBuilder<CreateListingCommand>().Build();
             listing.Handle(command);
 
             Assert.AreEqual(command.Description, listing.Description);

@@ -17,13 +17,6 @@
     public class CommandTests
     {
         [Test]
-        public void AllCommandDescendantsAreImmutable()
-        {
-            Assembly.GetAssembly(typeof(Command)).GetTypes().Where(t => t.IsSubclassOf(typeof(Command))).ToList()
-                .ForEach(TypeAssert.IsImmutable);
-        }
-
-        [Test]
         public void AllCommandDescendantsAreHandledByOneEntity()
         {
             var allAggregateTypes = Assembly.GetAssembly(typeof(Aggregate)).GetTypes()

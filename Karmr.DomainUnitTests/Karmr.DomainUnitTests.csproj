@@ -55,6 +55,7 @@
     <Compile Include="Aggregates\ListingTests.cs" />
     <Compile Include="Builders\Builders.cs" />
     <Compile Include="Commands\CommandHandlerTests.cs" />
+    <Compile Include="Commands\CreateListingCommandTests.cs" />
     <Compile Include="Helpers\TypeExtensionTests.cs" />
     <Compile Include="Commands\CommandTests.cs" />
     <Compile Include="Aggregates\AggregateTests.cs" />

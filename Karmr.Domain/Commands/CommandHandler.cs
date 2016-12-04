@@ -32,6 +32,7 @@ namespace Karmr.Domain.Commands
 
         public void Handle(ICommand command)
         {
+            command.Validate();
             var aggregate = this.GetAggregateInstance(command.GetType(), command.EntityKey);
             aggregate.Handle(command);
             this.repository.Save(command);

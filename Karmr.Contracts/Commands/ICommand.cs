@@ -6,5 +6,7 @@ namespace Karmr.Contracts.Commands
     {
         Guid EntityKey { get; }
         long Sequence { get; }
+
+        void Validate();
     }
 }

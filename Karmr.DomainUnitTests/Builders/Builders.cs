@@ -4,22 +4,25 @@ using System;
 
 namespace Karmr.DomainUnitTests.Builders
 {
+    using Builders;
     using Karmr.Contracts;
 
     using Moq;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
 
-    //internal static class Builder
-    //{
-    //    internal static AggregateBuilder<T> Aggregate<T>() where T: Aggregate
-    //    {
-    //        return new AggregateBuilder<T>();
-    //    }
+    internal static class Builder
+    {
+        //internal static AggregateBuilder<T> Aggregate<T>() where T : Aggregate
+        //{
+        //    return new AggregateBuilder<T>();
+        //}
 
-    //    internal static CommandBuilder<T> Command<T>() where T : Command
-    //    {
-    //        return new CommandBuilder<T>();
-    //    }
-    //}
+        internal static CommandBuilder<T> Command<T>() where T : Command
+        {
+            return new CommandBuilder<T>();
+        }
+    }
 
     //internal class AggregateBuilder<T> where T: Aggregate
     //{
@@ -36,23 +39,29 @@ namespace Karmr.DomainUnitTests.Builders
     //    }
     //}
 
-    //internal class CommandBuilder<T> where T : Command
-    //{
-    //    protected T command;
+    internal class CommandBuilder<T> where T : Command
+    {
+        protected T command;
 
-    //    internal CommandBuilder()
-    //    {
-    //        this.command = (T)Activator.CreateInstance(typeof(T));
-    //    }
+        internal CommandBuilder()
+        {
+            this.command = (T)Activator.CreateInstance(typeof(T));
 
-    //    //internal CommandBuilder<T> With(Action<T> action)
-    //    //{
-            
-    //    //}
+            if (this.command is CreateListingCommand)
+            {
+                this.With(x => (x as CreateListingCommand).Description = "Description");
+            }
+        }
 
-    //    internal T Build()
-    //    {
-    //        return this.command;
-    //    }
-    //}
+        internal CommandBuilder<T> With(Action<T> action)
+        {
+            action(this.command);
+            return this;
+        }
+
+        internal T Build()
+        {
+            return this.command;
+        }
+    }
 }
