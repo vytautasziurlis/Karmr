@@ -15,8 +15,6 @@
     [TestFixture]
     public class CommandTests
     {
-        
-
         [Test]
         public void AllCommandDescendantsAreImmutable()
         {
