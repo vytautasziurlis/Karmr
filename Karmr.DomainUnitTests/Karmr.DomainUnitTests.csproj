@@ -52,13 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aggregates\ListingTests.cs" />
-    <Compile Include="Builders\Builders.cs" />
+    <Compile Include="Entities\ListingTests.cs" />
+    <Compile Include="Builders\CommandBuilder.cs" />
+    <Compile Include="Builders\CommandBuilderHelper.cs" />
     <Compile Include="Commands\CommandHandlerTests.cs" />
+    <Compile Include="Commands\UpdateListingCommandTests.cs" />
     <Compile Include="Commands\CreateListingCommandTests.cs" />
     <Compile Include="Helpers\TypeExtensionTests.cs" />
     <Compile Include="Commands\CommandTests.cs" />
-    <Compile Include="Aggregates\AggregateTests.cs" />
+    <Compile Include="Entities\EntityTests.cs" />
     <Compile Include="Helpers\TypeAssert.cs" />
     <Compile Include="Helpers\TypeAssertTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -30,27 +30,27 @@ namespace Karmr.DomainUnitTests.Commands
         }
 
         [Test]
-        public void CommandHandlerFailsWhenCommandIsHandlerByMultipleAggregates()
+        public void CommandHandlerFailsWhenCommandIsHandlerByMultipleEntities()
         {
-            var subject = this.GetSubject(new List<Type> { typeof(Aggregate1), typeof(Aggregate2) });
+            var subject = this.GetSubject(new List<Type> { typeof(Entity1), typeof(Entity2) });
             Assert.Throws<UnhandledCommandException>(() => subject.Handle(new DummyCommand1()));
         }
 
         [Test]
-        public void CommandHandlerTriesToLoadAggregateCommands()
+        public void CommandHandlerTriesToLoadEntityCommands()
         {
-            var subject = this.GetSubject(new List<Type> { typeof(Aggregate1) });
+            var subject = this.GetSubject(new List<Type> { typeof(Entity1) });
 
             var command = new DummyCommand1();
             subject.Handle(command);
 
-            this.mockRepo.Verify(x => x.Get(typeof(Aggregate1), command.EntityKey), Times.Once);
+            this.mockRepo.Verify(x => x.Get(typeof(Entity1), command.EntityKey), Times.Once);
         }
 
         [Test]
         public void CommandHandlerPersistsCommandToRepository()
         {
-            var subject = this.GetSubject(new List<Type> { typeof(Aggregate1) });
+            var subject = this.GetSubject(new List<Type> { typeof(Entity1) });
 
             var command = new DummyCommand1();
             subject.Handle(command);
@@ -58,23 +58,28 @@ namespace Karmr.DomainUnitTests.Commands
             this.mockRepo.Verify(x => x.Save(command), Times.Once);
         }
 
-        private CommandHandler GetSubject(IEnumerable<Type> aggregateTypes)
+        private CommandHandler GetSubject(IEnumerable<Type> entityTypes)
         {
-            return new CommandHandler(this.mockRepo.Object, aggregateTypes);
+            return new CommandHandler(this.mockRepo.Object, entityTypes);
         }
 
-        private class DummyCommand1 : Command { }
-
-        private class Aggregate1 : Aggregate
+        private class DummyCommand1 : Command
         {
-            private Aggregate1(IEnumerable<ICommand> commands) : base(commands) { }
+            internal DummyCommand1() : base(Guid.Empty)
+            {
+            }
+        }
+
+        private class Entity1 : Entity
+        {
+            private Entity1(IEnumerable<ICommand> commands) : base(commands) { }
 
             private void Handle(DummyCommand1 command) { }
         }
 
-        private class Aggregate2 : Aggregate
+        private class Entity2 : Entity
         {
-            private Aggregate2(IEnumerable<ICommand> commands) : base(commands) { }
+            private Entity2(IEnumerable<ICommand> commands) : base(commands) { }
 
             private void Handle(DummyCommand1 command) { }
         }

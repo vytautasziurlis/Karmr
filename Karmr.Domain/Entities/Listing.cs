@@ -8,8 +8,10 @@ namespace Karmr.Domain.Entities
 
     using Contracts.Commands;
 
-    internal class Listing : Aggregate
+    internal class Listing : Entity
     {
+        internal Guid Id { get; private set; }
+
         internal string Description { get; private set; }
 
         internal Listing(IEnumerable<ICommand> commands) : base(commands) { }
@@ -21,6 +23,7 @@ namespace Karmr.Domain.Entities
                 throw new Exception(string.Format("Expected empty list of commands, found {0} commands", this.commands.Count));
             }
 
+            this.Id = command.EntityKey;
             this.Description = command.Description;
         }
 

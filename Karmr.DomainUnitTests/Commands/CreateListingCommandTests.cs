@@ -7,10 +7,18 @@ namespace Karmr.DomainUnitTests.Commands
 {
     public class CreateListingCommandTests
     {
+        private CommandBuilder<CreateListingCommand> commandBuilder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.commandBuilder = new CommandBuilder<CreateListingCommand>();
+        }
+
         [Test]
         public void ValidationDoesNotThrowForValidCommand()
         {
-            var subject = this.GetSubject().Build();
+            var subject = this.commandBuilder.Build();
 
             Assert.DoesNotThrow(() => subject.Validate());
         }
@@ -20,14 +28,9 @@ namespace Karmr.DomainUnitTests.Commands
         [TestCase(" ")]
         public void DescriptionIsRequired(string value)
         {
-            var subject = this.GetSubject().With(x => x.Description = value).Build();
+            var subject = this.commandBuilder.With(x => x.Description, value).Build();
 
             Assert.Throws<CommandValidationException>(() => subject.Validate());
-        }
-
-        private CommandBuilder<CreateListingCommand> GetSubject()
-        {
-            return new CommandBuilder<CreateListingCommand>();
         }
     }
 }

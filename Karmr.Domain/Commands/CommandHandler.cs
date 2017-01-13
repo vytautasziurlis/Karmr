@@ -20,51 +20,51 @@ namespace Karmr.Domain.Commands
 
         private readonly ICommandRepository repository;
 
-        private readonly IEnumerable<Type> aggregateTypes;
+        private readonly IEnumerable<Type> entityTypes;
 
-        private readonly Dictionary<Type, Type> commandAggregates = new Dictionary<Type, Type>();
+        private readonly Dictionary<Type, Type> commandEntities = new Dictionary<Type, Type>();
 
-        public CommandHandler(ICommandRepository repository, IEnumerable<Type> aggregateTypes)
+        public CommandHandler(ICommandRepository repository, IEnumerable<Type> entityTypes)
         {
             this.repository = repository;
-            this.aggregateTypes = aggregateTypes;
+            this.entityTypes = entityTypes;
         }
 
         public void Handle(ICommand command)
         {
             command.Validate();
-            var aggregate = this.GetAggregateInstance(command.GetType(), command.EntityKey);
-            aggregate.Handle(command);
+            var entity = this.GetEntityInstance(command.GetType(), command.EntityKey);
+            entity.Handle(command);
             this.repository.Save(command);
         }
 
-        private Aggregate GetAggregateInstance(Type commandType, Guid entityKey)
+        private Entity GetEntityInstance(Type commandType, Guid entityKey)
         {
-            var aggregateType = this.GetAggregateType(commandType);
-            var @params = new object[] { this.repository.Get(aggregateType, entityKey) };
+            var entityType = this.GetEntityType(commandType);
+            var @params = new object[] { this.repository.Get(entityType, entityKey) };
 
-            return Activator.CreateInstance(aggregateType, this.BindingFlags, null, @params, null) as Aggregate;
+            return Activator.CreateInstance(entityType, this.BindingFlags, null, @params, null) as Entity;
         }
 
-        private Type GetAggregateType(Type commandType)
+        private Type GetEntityType(Type commandType)
         {
-            if (!this.commandAggregates.ContainsKey(commandType))
+            if (!this.commandEntities.ContainsKey(commandType))
             {
-                var mathingAggregateTypes = this.aggregateTypes
-                    .Where(t => t.IsSubclassOf(typeof(Aggregate))).ToList()
+                var matchingEntityTypes = this.entityTypes
+                    .Where(t => t.IsSubclassOf(typeof(Entity))).ToList()
                     .Where(t => t.GetMethodBySignature(typeof(void), new[] { commandType }, this.BindingFlags) != null)
                     .ToList();
 
-                if (mathingAggregateTypes.Count != 1)
+                if (matchingEntityTypes.Count != 1)
                 {
-                    throw new UnhandledCommandException(string.Format("Excepted exatly one aggregate to handle command {0}, found {1} instead.",
+                    throw new UnhandledCommandException(string.Format("Expected exactly one entity to handle command {0}, found {1} instead.",
                         commandType,
-                        this.aggregateTypes.Count()));
+                        this.entityTypes.Count()));
                 }
 
-                this.commandAggregates.Add(commandType, mathingAggregateTypes.First());
+                this.commandEntities.Add(commandType, matchingEntityTypes.First());
             }
-            return this.commandAggregates[commandType];
+            return this.commandEntities[commandType];
         }
     }
 }

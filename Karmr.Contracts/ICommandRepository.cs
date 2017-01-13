@@ -9,6 +9,6 @@
     {
         void Save(ICommand command);
 
-        IEnumerable<ICommand> Get(Type aggregateType, Guid entityKey);
+        IEnumerable<ICommand> Get(Type entityType, Guid entityKey);
     }
 }

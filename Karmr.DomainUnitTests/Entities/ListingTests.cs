@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Linq;
 using Karmr.Domain.Commands;
 
-namespace Karmr.DomainUnitTests.Aggregates
+namespace Karmr.DomainUnitTests.Entities
 {
     using System;
     using System.Collections.Generic;

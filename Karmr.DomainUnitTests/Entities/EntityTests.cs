@@ -6,12 +6,12 @@ using System.Linq;
 using System.Collections.Generic;
 using Karmr.Contracts.Commands;
 
-namespace Karmr.DomainUnitTests.Aggregates
+namespace Karmr.DomainUnitTests.Entities
 {
-    public class AggregateTests
+    public class EntityTests
     {
         [Test]
-        public void NewAggregateHasEmptyCommandList()
+        public void NewEntityHasEmptyCommandList()
         {
             var subject = this.GetSubject(null);
             Assert.IsEmpty(subject.GetCommands());
@@ -48,22 +48,22 @@ namespace Karmr.DomainUnitTests.Aggregates
             Assert.Throws<Exception>(() => subject.Handle(new ConcreteCommand()));
         }
 
-        private IEnumerable<ICommand> HandleCommand(Aggregate aggregate, Command command)
+        private IEnumerable<ICommand> HandleCommand(Entity entity, Command command)
         {
-            aggregate.Handle(command);
-            return aggregate.GetCommands();
+            entity.Handle(command);
+            return entity.GetCommands();
         }
 
-        private ConcreteAggregate GetSubject(Action<Command> func)
+        private ConcreteEntity GetSubject(Action<Command> func)
         {
-            return new ConcreteAggregate(func);
+            return new ConcreteEntity(func);
         }
 
-        private class ConcreteAggregate : Aggregate
+        private class ConcreteEntity : Entity
         {
             private Action<Command> HandleFunc { get; }
 
-            public ConcreteAggregate(Action<Command> func) : base(new List<ICommand>())
+            public ConcreteEntity(Action<Command> func) : base(new List<ICommand>())
             {
                 this.HandleFunc = func;
             }
@@ -74,6 +74,11 @@ namespace Karmr.DomainUnitTests.Aggregates
             }
         }
 
-        private class ConcreteCommand : Command { }
+        private class ConcreteCommand : Command
+        {
+            internal ConcreteCommand() : base(Guid.Empty)
+            {
+            }
+        }
     }
 }
