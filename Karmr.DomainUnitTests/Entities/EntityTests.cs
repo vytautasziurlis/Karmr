@@ -11,24 +11,24 @@ namespace Karmr.DomainUnitTests.Entities
     public class EntityTests
     {
         [Test]
-        public void NewEntityHasEmptyCommandList()
+        public void NewEntityHasEmptyEventList()
         {
             var subject = this.GetSubject(null);
-            Assert.IsEmpty(subject.GetCommands());
+            Assert.IsEmpty(subject.Events);
         }
 
         [Test]
-        public void HandlingCommandUpdatesCommands()
+        public void HandlingCommandUpdatesEvents()
         {
             var subject = this.GetSubject(x => { });
             var command1 = new ConcreteCommand();
-            var commands = this.HandleCommand(subject, command1).ToList();
-            Assert.AreEqual(1, commands.Count);
+            subject.Handle(command1);
+            Assert.AreEqual(1, subject.Events);
             Assert.AreSame(command1, commands.First());
 
             var command2 = new ConcreteCommand();
-            commands = this.HandleCommand(subject, command2).ToList();
-            Assert.AreEqual(2, commands.Count);
+            subject.Handle(command2);
+            Assert.AreEqual(2, subject.Events.Count);
             Assert.AreSame(command1, commands.First());
             Assert.AreSame(command2, commands.Last());
         }
@@ -38,7 +38,7 @@ namespace Karmr.DomainUnitTests.Entities
         {
             var subject = this.GetSubject(x => { });
             subject.Handle(new ConcreteCommand());
-            Assert.IsEmpty(subject.GetCommands());
+            Assert.IsEmpty(subject.Events);
         }
 
         [Test]
@@ -46,12 +46,6 @@ namespace Karmr.DomainUnitTests.Entities
         {
             var subject = this.GetSubject(x => { throw new Exception(); });
             Assert.Throws<Exception>(() => subject.Handle(new ConcreteCommand()));
-        }
-
-        private IEnumerable<ICommand> HandleCommand(Entity entity, Command command)
-        {
-            entity.Handle(command);
-            return entity.GetCommands();
         }
 
         private ConcreteEntity GetSubject(Action<Command> func)

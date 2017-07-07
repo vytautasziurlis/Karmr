@@ -1,6 +1,5 @@
 ﻿using Karmr.Domain.Entities;
 using NUnit.Framework;
-using System.Linq;
 using Karmr.Domain.Commands;
 
 namespace Karmr.DomainUnitTests.Entities
@@ -8,8 +7,9 @@ namespace Karmr.DomainUnitTests.Entities
     using System;
     using System.Collections.Generic;
 
-    using Karmr.Contracts.Commands;
     using Builders;
+
+    using Karmr.Domain.Events;
 
     public class ListingTests
     {
@@ -77,7 +77,7 @@ namespace Karmr.DomainUnitTests.Entities
 
         private Listing GetSubject()
         {
-            return new Listing(new List<ICommand>());
+            return new Listing(new List<Event>());
         }
     }
 }

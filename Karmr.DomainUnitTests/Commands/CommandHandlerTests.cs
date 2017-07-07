@@ -11,6 +11,7 @@ namespace Karmr.DomainUnitTests.Commands
     using System.Collections.Generic;
 
     using Karmr.Domain.Entities;
+    using Karmr.Domain.Events;
 
     public class CommandHandlerTests
     {
@@ -30,7 +31,7 @@ namespace Karmr.DomainUnitTests.Commands
         }
 
         [Test]
-        public void CommandHandlerFailsWhenCommandIsHandlerByMultipleEntities()
+        public void CommandHandlerFailsWhenCommandIsHandledByMultipleEntities()
         {
             var subject = this.GetSubject(new List<Type> { typeof(Entity1), typeof(Entity2) });
             Assert.Throws<UnhandledCommandException>(() => subject.Handle(new DummyCommand1()));
@@ -72,14 +73,14 @@ namespace Karmr.DomainUnitTests.Commands
 
         private class Entity1 : Entity
         {
-            private Entity1(IEnumerable<ICommand> commands) : base(commands) { }
+            private Entity1(IEnumerable<Event> events) : base(events) { }
 
             private void Handle(DummyCommand1 command) { }
         }
 
         private class Entity2 : Entity
         {
-            private Entity2(IEnumerable<ICommand> commands) : base(commands) { }
+            private Entity2(IEnumerable<Event> events) : base(events) { }
 
             private void Handle(DummyCommand1 command) { }
         }
