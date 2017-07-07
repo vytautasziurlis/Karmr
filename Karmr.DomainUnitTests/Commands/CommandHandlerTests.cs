@@ -71,16 +71,16 @@ namespace Karmr.DomainUnitTests.Commands
             }
         }
 
-        private class Entity1 : Entity
+        internal class Entity1 : Entity
         {
-            private Entity1(IEnumerable<Event> events) : base(events) { }
+            internal Entity1(IEnumerable<Event> events) : base(events) { }
 
             private void Handle(DummyCommand1 command) { }
         }
 
-        private class Entity2 : Entity
+        internal class Entity2 : Entity
         {
-            private Entity2(IEnumerable<Event> events) : base(events) { }
+            internal Entity2(IEnumerable<Event> events) : base(events) { }
 
             private void Handle(DummyCommand1 command) { }
         }

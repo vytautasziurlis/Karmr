@@ -2,43 +2,21 @@
 using Karmr.Domain.Commands;
 using Karmr.Domain.Entities;
 using NUnit.Framework;
-using System.Linq;
 using System.Collections.Generic;
-using Karmr.Contracts.Commands;
 
 namespace Karmr.DomainUnitTests.Entities
 {
+    using Karmr.Domain.Events;
+
     public class EntityTests
     {
         [Test]
         public void NewEntityHasEmptyEventList()
         {
             var subject = this.GetSubject(null);
+
             Assert.IsEmpty(subject.Events);
-        }
-
-        [Test]
-        public void HandlingCommandUpdatesEvents()
-        {
-            var subject = this.GetSubject(x => { });
-            var command1 = new ConcreteCommand();
-            subject.Handle(command1);
-            Assert.AreEqual(1, subject.Events);
-            Assert.AreSame(command1, commands.First());
-
-            var command2 = new ConcreteCommand();
-            subject.Handle(command2);
-            Assert.AreEqual(2, subject.Events.Count);
-            Assert.AreSame(command1, commands.First());
-            Assert.AreSame(command2, commands.Last());
-        }
-
-        [Test]
-        public void HandlingFalsyCommandDoesNotChangeState()
-        {
-            var subject = this.GetSubject(x => { });
-            subject.Handle(new ConcreteCommand());
-            Assert.IsEmpty(subject.Events);
+            Assert.IsEmpty(subject.GetUncommittedEvents());
         }
 
         [Test]
@@ -57,12 +35,12 @@ namespace Karmr.DomainUnitTests.Entities
         {
             private Action<Command> HandleFunc { get; }
 
-            public ConcreteEntity(Action<Command> func) : base(new List<ICommand>())
+            public ConcreteEntity(Action<Command> func) : base(new List<Event>())
             {
                 this.HandleFunc = func;
             }
 
-            internal void Handle(ConcreteCommand command)
+            private void Handle(ConcreteCommand command)
             {
                 this.HandleFunc.Invoke(command);
             }
