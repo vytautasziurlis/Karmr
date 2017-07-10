@@ -1,16 +1,14 @@
 ﻿namespace Karmr.DomainUnitTests.Commands
 {
+    using Domain.Helpers;
+    using Karmr.Domain.Commands;
+    using Karmr.Domain.Entities;
+    using Karmr.DomainUnitTests.Helpers;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-
-    using Karmr.Domain.Commands;
-    using Karmr.Domain.Entities;
-    using Karmr.DomainUnitTests.Helpers;
-
-    using NUnit.Framework;
-    using Domain.Helpers;
 
     [TestFixture]
     public class CommandTests

@@ -9,19 +9,14 @@ namespace Karmr.Domain.Commands
 {
     public abstract class Command : ICommand
     {
-        public Guid EntityKey { get; private set; }
+        public Guid EntityKey { get; }
 
-        public Guid UserId { get; private set; }
+        public Guid UserId { get; }
 
-        public Command(Guid userId)
+        protected Command(Guid userId)
         {
             this.EntityKey = Guid.NewGuid();
             this.UserId = userId;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0}: ", nameof(this.GetType));
         }
 
         public void Validate()

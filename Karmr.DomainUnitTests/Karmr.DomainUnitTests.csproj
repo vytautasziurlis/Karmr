@@ -58,6 +58,7 @@
     <Compile Include="Commands\CommandHandlerTests.cs" />
     <Compile Include="Commands\UpdateListingCommandTests.cs" />
     <Compile Include="Commands\CreateListingCommandTests.cs" />
+    <Compile Include="Events\EventTests.cs" />
     <Compile Include="Helpers\StaticClock.cs" />
     <Compile Include="Helpers\TypeExtensionTests.cs" />
     <Compile Include="Commands\CommandTests.cs" />
