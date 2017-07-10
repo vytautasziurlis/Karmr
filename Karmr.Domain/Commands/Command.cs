@@ -1,5 +1,5 @@
 ﻿using System;
-using Karmr.Contracts.Commands;
+using Karmr.Contracts;
 using System.Reflection;
 using System.Linq;
 using FluentValidation;

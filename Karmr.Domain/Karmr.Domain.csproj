@@ -52,7 +52,11 @@
     <Compile Include="CommandValidators\CreateListingCommandValidator.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Listing.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\ListingUpdated.cs" />
+    <Compile Include="Events\ListingCreated.cs" />
     <Compile Include="Infrastructure\CommandValidationException.cs" />
+    <Compile Include="Infrastructure\UnhandledEventException.cs" />
     <Compile Include="Infrastructure\UnhandledCommandException.cs" />
     <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

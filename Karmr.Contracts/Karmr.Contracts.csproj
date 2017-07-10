@@ -40,8 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="ICommandRepository.cs" />
+    <Compile Include="ICommand.cs" />
+    <Compile Include="IEvent.cs" />
+    <Compile Include="IEventRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
