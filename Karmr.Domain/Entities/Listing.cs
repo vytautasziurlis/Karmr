@@ -16,7 +16,7 @@
 
         internal string Description { get; private set; }
 
-        internal Listing(IEnumerable<IEvent> events) : base(events) { }
+        internal Listing(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
         private void Handle(CreateListingCommand command)
         {
@@ -24,7 +24,7 @@
             {
                 throw new Exception(string.Format("Expected empty list of events, found {0} events", this.Events.Count));
             }
-            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Description));
+            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Description, this.Clock.UtcNow));
         }
 
         private void Handle(UpdateListingCommand command)
@@ -37,7 +37,7 @@
             {
                 throw new Exception("Permission denied");
             }
-            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Description));
+            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Description, this.Clock.UtcNow));
         }
 
         private void Apply(ListingCreated @event)

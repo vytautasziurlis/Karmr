@@ -12,11 +12,11 @@
 
         internal DateTime Timestamp { get; }
 
-        internal Event(Guid entityKey, Guid userId)
+        internal Event(Guid entityKey, Guid userId, DateTime timestamp)
         {
             this.EntityKey = entityKey;
             this.UserId = userId;
-            this.Timestamp = DateTime.UtcNow;
+            this.Timestamp = timestamp;
         }
     }
 }

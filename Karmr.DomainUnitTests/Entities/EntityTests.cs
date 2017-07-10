@@ -9,12 +9,16 @@
     using System;
     using System.Collections.Generic;
 
+    using Karmr.DomainUnitTests.Helpers;
+
     public class EntityTests
     {
+        private readonly IClock clock = new StaticClock(DateTime.UtcNow);
+
         [Test]
         public void NewEntityHasEmptyEventList()
         {
-            var subject = new ConcreteEntity(new List<IEvent>());
+            var subject = this.GetSubject(new List<IEvent>());
 
             Assert.IsEmpty(subject.Events);
             Assert.IsEmpty(subject.GetUncommittedEvents());
@@ -24,7 +28,7 @@
         public void EntityConstructorAppliesExistingEvents()
         {
             var events = new List<IEvent> { new ConcreteEvent(), new ConcreteEvent() };
-            var subject = new ConcreteEntity(events);
+            var subject = this.GetSubject(events);
 
             Assert.AreEqual(2, subject.AppliedEventCount);
             Assert.AreEqual(2, subject.Events.Count);
@@ -35,7 +39,7 @@
         public void ExceptionThrownWhenEntityCantApplyEvent()
         {
             var events = new List<IEvent> { new UnhandledEvent() };
-            Assert.Throws<UnhandledEventException>(() => new ConcreteEntity(events));
+            Assert.Throws<UnhandledEventException>(() => this.GetSubject(events));
         }
 
         [Test]
@@ -43,7 +47,7 @@
         {
             var events = new List<IEvent> { new ConcreteEvent(), new ConcreteEvent() };
 
-            var subject = new ConcreteEntity(events, null);
+            var subject = this.GetSubject(events);
             subject.Handle(new ConcreteCommand());
 
             Assert.AreEqual(3, subject.Events.Count);
@@ -53,7 +57,7 @@
         [Test]
         public void ExceptionThrownWhenEntityCantHandleCommand()
         {
-            var subject = new ConcreteEntity(new List<IEvent>());
+            var subject = this.GetSubject(new List<IEvent>());
             var command = new UnhandledCommand();
 
             Assert.Throws<UnhandledCommandException>(() => subject.Handle(command));
@@ -63,8 +67,13 @@
         public void ExceptionIsBubbledUpWhenHandlingCommandThrows()
         {
             Action<ConcreteEntity, Command> handleFunction = (entity, command) => throw new Exception();
-            var subject = new ConcreteEntity(new List<IEvent>(), handleFunction);
+            var subject = this.GetSubject(new List<IEvent>(), handleFunction);
             Assert.Throws<Exception>(() => subject.Handle(new ConcreteCommand()));
+        }
+
+        private ConcreteEntity GetSubject(IEnumerable<IEvent> events, Action<ConcreteEntity, Command> handleFunction = null)
+        {
+            return new ConcreteEntity(this.clock, events, handleFunction);
         }
 
         private class ConcreteEntity : Entity
@@ -73,12 +82,7 @@
 
             internal int AppliedEventCount;
 
-            public ConcreteEntity(IEnumerable<IEvent> events) : base(events)
-            {
-                this.HandleFunc = null;
-            }
-
-            public ConcreteEntity(IEnumerable<IEvent> events, Action<ConcreteEntity, Command> handleFunction) : base(events)
+            public ConcreteEntity(IClock clock, IEnumerable<IEvent> events, Action<ConcreteEntity, Command> handleFunction) : base(clock, events)
             {
                 this.HandleFunc = handleFunction;
             }
@@ -102,7 +106,7 @@
 
         private class ConcreteEvent : Event
         {
-            public ConcreteEvent() : base(Guid.Empty, Guid.Empty) { }
+            public ConcreteEvent() : base(Guid.Empty, Guid.Empty, DateTime.UtcNow) { }
         }
 
         private class UnhandledCommand : Command
@@ -111,7 +115,7 @@
         }
 
         private class UnhandledEvent : Event {
-            public UnhandledEvent() : base(Guid.Empty, Guid.Empty) { }
+            public UnhandledEvent() : base(Guid.Empty, Guid.Empty, DateTime.UtcNow) { }
         }
     }
 }

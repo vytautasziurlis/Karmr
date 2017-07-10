@@ -10,8 +10,12 @@
     using System;
     using System.Collections.Generic;
 
+    using Karmr.DomainUnitTests.Helpers;
+
     public class CommandHandlerTests
     {
+        private readonly IClock clock = new StaticClock(DateTime.UtcNow);
+
         private Mock<IEventRepository> mockRepo;
 
         [SetUp]
@@ -58,7 +62,7 @@
 
         private CommandHandler GetSubject(IEnumerable<Type> entityTypes)
         {
-            return new CommandHandler(this.mockRepo.Object, entityTypes);
+            return new CommandHandler(this.clock, this.mockRepo.Object, entityTypes);
         }
 
         private class DummyCommand1 : Command
@@ -70,7 +74,7 @@
 
         private class Entity1 : Entity
         {
-            private Entity1(IEnumerable<IEvent> events) : base(events) { }
+            private Entity1(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
             private void Handle(DummyCommand1 command)
             {
@@ -82,14 +86,14 @@
 
         private class DummyEvent1 : Event
         {
-            internal DummyEvent1() : base(Guid.Empty, Guid.Empty)
+            internal DummyEvent1() : base(Guid.Empty, Guid.Empty, DateTime.UtcNow)
             {
             }
         }
 
         private class Entity2 : Entity
         {
-            private Entity2(IEnumerable<IEvent> events) : base(events) { }
+            private Entity2(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
             private void Handle(DummyCommand1 command) { }
         }

@@ -6,7 +6,7 @@
     {
         internal string Description { get; }
 
-        public ListingCreated(Guid entityKey, Guid userId, string description) : base(entityKey, userId)
+        public ListingCreated(Guid entityKey, Guid userId, string description, DateTime timestamp) : base(entityKey, userId, timestamp)
         {
             this.Description = description;
         }

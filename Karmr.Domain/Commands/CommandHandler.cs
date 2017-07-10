@@ -17,14 +17,17 @@ namespace Karmr.Domain.Commands
             | BindingFlags.Instance
             | BindingFlags.DeclaredOnly;
 
+        private readonly IClock clock;
+
         private readonly IEventRepository repository;
 
         private readonly IEnumerable<Type> entityTypes;
 
         private readonly Dictionary<Type, Type> commandEntities = new Dictionary<Type, Type>();
 
-        public CommandHandler(IEventRepository repository, IEnumerable<Type> entityTypes)
+        public CommandHandler(IClock clock, IEventRepository repository, IEnumerable<Type> entityTypes)
         {
+            this.clock = clock;
             this.repository = repository;
             this.entityTypes = entityTypes;
         }
@@ -47,7 +50,7 @@ namespace Karmr.Domain.Commands
         private Entity GetEntityInstance(Type commandType, Guid entityKey)
         {
             var entityType = this.GetEntityType(commandType);
-            var @params = new object[] { this.repository.Get(entityType, entityKey) };
+            var @params = new object[] { this.clock, this.repository.Get(entityType, entityKey) };
 
             return Activator.CreateInstance(entityType, this.BindingFlags, null, @params, null) as Entity;
         }

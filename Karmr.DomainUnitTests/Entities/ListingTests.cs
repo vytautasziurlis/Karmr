@@ -10,8 +10,12 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Karmr.DomainUnitTests.Helpers;
+
     public class ListingTests
     {
+        private readonly IClock clock = new StaticClock(DateTime.UtcNow);
+
         [Test]
         public void HandlingCreateListingCommandUpdatesState()
         {
@@ -39,7 +43,7 @@
             Assert.AreEqual(command.EntityKey, @event.EntityKey);
             Assert.AreEqual(command.UserId, @event.UserId);
             Assert.AreEqual(command.Description, @event.Description);
-            //TODO assert Timestamp
+            Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
 
         [Test]
@@ -110,13 +114,15 @@
             Assert.AreEqual(2, uncommittedEvents.Count);
             var @event = uncommittedEvents.Last() as ListingUpdated;
             Assert.NotNull(@event);
+            Assert.AreEqual(updateCommand.EntityKey, @event.EntityKey);
+            Assert.AreEqual(updateCommand.UserId, @event.UserId);
             Assert.AreEqual(updateCommand.Description, @event.Description);
-            //TODO assert Timestamp
+            Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
 
         private Listing GetSubject()
         {
-            return new Listing(new List<IEvent>());
+            return new Listing(this.clock, new List<IEvent>());
         }
     }
 }

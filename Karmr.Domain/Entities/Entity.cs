@@ -19,6 +19,8 @@
 
         private int uncommittedEventCount;
 
+        protected readonly IClock Clock;
+
         internal IReadOnlyList<IEvent> Events
         {
             get
@@ -27,8 +29,10 @@
             }
         }
 
-        protected Entity(IEnumerable<IEvent> events)
+        protected Entity(IClock clock, IEnumerable<IEvent> events)
         {
+            this.Clock = clock;
+
             foreach (var @event in events)
             {
                 this.Apply(@event);
