@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,7 +43,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Persistence\SqlEventRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Karmr.Contracts\Karmr.Contracts.csproj">
+      <Project>{4a4033a0-db64-4de9-a14d-ad9450b1acd7}</Project>
+      <Name>Karmr.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Karmr.Domain\Karmr.Domain.csproj">
+      <Project>{cb54ae4c-8ae3-4c6b-8241-bf87849be923}</Project>
+      <Name>Karmr.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Karmr.Persistence\Karmr.Persistence.csproj">
+      <Project>{93dd310d-f252-4462-b744-ced39e0b090e}</Project>
+      <Name>Karmr.Persistence</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

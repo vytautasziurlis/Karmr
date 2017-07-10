@@ -42,7 +42,7 @@ namespace Karmr.Domain.Commands
             var sequenceNumber = entity.Events.Count - uncommittedEvents.Count;
             foreach (var @event in uncommittedEvents)
             {
-                this.repository.Save(@event, sequenceNumber);
+                this.repository.Save(@event, entity.GetType(), sequenceNumber);
                 sequenceNumber++;
             }
         }

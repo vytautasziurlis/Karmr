@@ -15,3 +15,7 @@
 /.vs
 /Karmr.Persistence/obj
 /Tests/Karmr.IntegrationTests/obj
+/Karmr.Persistence/bin
+/Tests/Karmr.DomainUnitTests/bin
+/Tests/Karmr.DomainUnitTests/obj
+/Tests/Karmr.IntegrationTests/bin
