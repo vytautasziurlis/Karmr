@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace ConsoleApplication1
+﻿namespace ConsoleApplication1
 {
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Reflection;
+    using System;
 
-    using Karmr.Contracts.Commands;
+    using Karmr.Contracts;
     using Karmr.Domain.Commands;
 
     using Newtonsoft.Json;

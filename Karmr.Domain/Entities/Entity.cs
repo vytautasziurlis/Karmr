@@ -1,16 +1,13 @@
-﻿using Karmr.Contracts.Commands;
-using Karmr.Domain.Helpers;
-
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace Karmr.Domain.Entities
+﻿namespace Karmr.Domain.Entities
 {
-    using System;
-    using System.Linq;
-
+    using Karmr.Contracts;
     using Karmr.Domain.Events;
+    using Karmr.Domain.Helpers;
     using Karmr.Domain.Infrastructure;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
 
     internal abstract class Entity
     {
@@ -22,7 +19,7 @@ namespace Karmr.Domain.Entities
 
         private int uncommittedEventCount;
 
-        internal IReadOnlyList<Event> Events
+        internal IReadOnlyList<IEvent> Events
         {
             get
             {
@@ -30,12 +27,12 @@ namespace Karmr.Domain.Entities
             }
         }
 
-        protected Entity(IEnumerable<Event> events)
+        protected Entity(IEnumerable<IEvent> events)
         {
             foreach (var @event in events)
             {
                 this.Apply(@event);
-                this.events.Add(@event);
+                this.events.Add(@event as Event);
             }
             this.uncommittedEventCount = 0;
         }
@@ -72,7 +69,7 @@ namespace Karmr.Domain.Entities
             this.uncommittedEventCount++;
         }
 
-        private void Apply(Event @event)
+        private void Apply(IEvent @event)
         {
             var applyMethod = this.GetMethodBySignature(new[] { @event.GetType() });
             if (applyMethod == null)

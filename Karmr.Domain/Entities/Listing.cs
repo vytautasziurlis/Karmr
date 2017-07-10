@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Karmr.Contracts;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Events;
 
@@ -15,7 +16,7 @@
 
         internal string Description { get; private set; }
 
-        internal Listing(IEnumerable<Event> events) : base(events) { }
+        internal Listing(IEnumerable<IEvent> events) : base(events) { }
 
         private void Handle(CreateListingCommand command)
         {

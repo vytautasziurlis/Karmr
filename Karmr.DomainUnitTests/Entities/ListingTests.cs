@@ -1,16 +1,14 @@
-﻿using Karmr.Domain.Entities;
-using NUnit.Framework;
-using Karmr.Domain.Commands;
-
-namespace Karmr.DomainUnitTests.Entities
+﻿namespace Karmr.DomainUnitTests.Entities
 {
+    using Builders;
+    using Karmr.Contracts;
+    using Karmr.Domain.Commands;
+    using Karmr.Domain.Entities;
+    using Karmr.Domain.Events;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Builders;
-
-    using Karmr.Domain.Events;
 
     public class ListingTests
     {
@@ -118,7 +116,7 @@ namespace Karmr.DomainUnitTests.Entities
 
         private Listing GetSubject()
         {
-            return new Listing(new List<Event>());
+            return new Listing(new List<IEvent>());
         }
     }
 }

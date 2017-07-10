@@ -7,7 +7,6 @@ namespace Karmr.Domain.Commands
     using System.Reflection;
 
     using Karmr.Contracts;
-    using Karmr.Contracts.Commands;
     using Karmr.Domain.Entities;
     using Helpers;
     using Infrastructure;
@@ -18,13 +17,13 @@ namespace Karmr.Domain.Commands
             | BindingFlags.Instance
             | BindingFlags.DeclaredOnly;
 
-        private readonly ICommandRepository repository;
+        private readonly IEventRepository repository;
 
         private readonly IEnumerable<Type> entityTypes;
 
         private readonly Dictionary<Type, Type> commandEntities = new Dictionary<Type, Type>();
 
-        public CommandHandler(ICommandRepository repository, IEnumerable<Type> entityTypes)
+        public CommandHandler(IEventRepository repository, IEnumerable<Type> entityTypes)
         {
             this.repository = repository;
             this.entityTypes = entityTypes;
@@ -35,7 +34,14 @@ namespace Karmr.Domain.Commands
             command.Validate();
             var entity = this.GetEntityInstance(command.GetType(), command.EntityKey);
             entity.Handle(command);
-            this.repository.Save(command);
+
+            var uncommittedEvents = entity.GetUncommittedEvents();
+            var sequenceNumber = entity.Events.Count - uncommittedEvents.Count;
+            foreach (var @event in uncommittedEvents)
+            {
+                this.repository.Save(@event, sequenceNumber);
+                sequenceNumber++;
+            }
         }
 
         private Entity GetEntityInstance(Type commandType, Guid entityKey)

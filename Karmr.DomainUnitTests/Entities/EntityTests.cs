@@ -1,56 +1,117 @@
-﻿using System;
-using Karmr.Domain.Commands;
-using Karmr.Domain.Entities;
-using NUnit.Framework;
-using System.Collections.Generic;
-
-namespace Karmr.DomainUnitTests.Entities
+﻿namespace Karmr.DomainUnitTests.Entities
 {
+    using Karmr.Contracts;
+    using Karmr.Domain.Commands;
+    using Karmr.Domain.Entities;
     using Karmr.Domain.Events;
+    using Karmr.Domain.Infrastructure;
+    using NUnit.Framework;
+    using System;
+    using System.Collections.Generic;
 
     public class EntityTests
     {
         [Test]
         public void NewEntityHasEmptyEventList()
         {
-            var subject = this.GetSubject(null);
+            var subject = new ConcreteEntity(new List<IEvent>());
 
             Assert.IsEmpty(subject.Events);
             Assert.IsEmpty(subject.GetUncommittedEvents());
         }
 
         [Test]
-        public void HandlingExceptionyCommandThrowsException()
+        public void EntityConstructorAppliesExistingEvents()
         {
-            var subject = this.GetSubject(x => { throw new Exception(); });
-            Assert.Throws<Exception>(() => subject.Handle(new ConcreteCommand()));
+            var events = new List<IEvent> { new ConcreteEvent(), new ConcreteEvent() };
+            var subject = new ConcreteEntity(events);
+
+            Assert.AreEqual(2, subject.AppliedEventCount);
+            Assert.AreEqual(2, subject.Events.Count);
+            Assert.IsEmpty(subject.GetUncommittedEvents());
         }
 
-        private ConcreteEntity GetSubject(Action<Command> func)
+        [Test]
+        public void ExceptionThrownWhenEntityCantApplyEvent()
         {
-            return new ConcreteEntity(func);
+            var events = new List<IEvent> { new UnhandledEvent() };
+            Assert.Throws<UnhandledEventException>(() => new ConcreteEntity(events));
+        }
+
+        [Test]
+        public void UncommittedEventsUpdatedWhenCommandRaisesEvent()
+        {
+            var events = new List<IEvent> { new ConcreteEvent(), new ConcreteEvent() };
+
+            var subject = new ConcreteEntity(events, null);
+            subject.Handle(new ConcreteCommand());
+
+            Assert.AreEqual(3, subject.Events.Count);
+            Assert.AreEqual(1, subject.GetUncommittedEvents().Count);
+        }
+
+        [Test]
+        public void ExceptionThrownWhenEntityCantHandleCommand()
+        {
+            var subject = new ConcreteEntity(new List<IEvent>());
+            var command = new UnhandledCommand();
+
+            Assert.Throws<UnhandledCommandException>(() => subject.Handle(command));
+        }
+
+        [Test]
+        public void ExceptionIsBubbledUpWhenHandlingCommandThrows()
+        {
+            Action<ConcreteEntity, Command> handleFunction = (entity, command) => throw new Exception();
+            var subject = new ConcreteEntity(new List<IEvent>(), handleFunction);
+            Assert.Throws<Exception>(() => subject.Handle(new ConcreteCommand()));
         }
 
         private class ConcreteEntity : Entity
         {
-            private Action<Command> HandleFunc { get; }
+            private Action<ConcreteEntity, Command> HandleFunc { get; }
 
-            public ConcreteEntity(Action<Command> func) : base(new List<Event>())
+            internal int AppliedEventCount;
+
+            public ConcreteEntity(IEnumerable<IEvent> events) : base(events)
             {
-                this.HandleFunc = func;
+                this.HandleFunc = null;
+            }
+
+            public ConcreteEntity(IEnumerable<IEvent> events, Action<ConcreteEntity, Command> handleFunction) : base(events)
+            {
+                this.HandleFunc = handleFunction;
             }
 
             private void Handle(ConcreteCommand command)
             {
-                this.HandleFunc.Invoke(command);
+                this.HandleFunc?.Invoke(this, command);
+                this.Raise(new ConcreteEvent());
+            }
+
+            private void Apply(ConcreteEvent @event)
+            {
+                this.AppliedEventCount++;
             }
         }
 
         private class ConcreteCommand : Command
         {
-            internal ConcreteCommand() : base(Guid.Empty)
-            {
-            }
+            internal ConcreteCommand() : base(Guid.Empty) { }
+        }
+
+        private class ConcreteEvent : Event
+        {
+            public ConcreteEvent() : base(Guid.Empty, Guid.Empty) { }
+        }
+
+        private class UnhandledCommand : Command
+        {
+            internal UnhandledCommand() : base(Guid.Empty) { }
+        }
+
+        private class UnhandledEvent : Event {
+            public UnhandledEvent() : base(Guid.Empty, Guid.Empty) { }
         }
     }
 }

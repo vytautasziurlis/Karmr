@@ -2,7 +2,9 @@
 {
     using System;
 
-    internal abstract class Event
+    using Karmr.Contracts;
+
+    internal abstract class Event : IEvent
     {
         internal Guid EntityKey { get; }
 

@@ -1,26 +1,23 @@
-﻿using NUnit.Framework;
-using Karmr.Domain.Commands;
-using Karmr.Contracts;
-using Moq;
-using Karmr.Domain.Infrastructure;
-using Karmr.Contracts.Commands;
-
-namespace Karmr.DomainUnitTests.Commands
+﻿namespace Karmr.DomainUnitTests.Commands
 {
+    using Karmr.Contracts;
+    using Karmr.Domain.Commands;
+    using Karmr.Domain.Entities;
+    using Karmr.Domain.Events;
+    using Karmr.Domain.Infrastructure;
+    using Moq;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
 
-    using Karmr.Domain.Entities;
-    using Karmr.Domain.Events;
-
     public class CommandHandlerTests
     {
-        private Mock<ICommandRepository> mockRepo;
+        private Mock<IEventRepository> mockRepo;
 
         [SetUp]
         public void Setup()
         {
-            this.mockRepo = new Mock<ICommandRepository>();
+            this.mockRepo = new Mock<IEventRepository>();
         }
 
         [Test]
@@ -38,7 +35,7 @@ namespace Karmr.DomainUnitTests.Commands
         }
 
         [Test]
-        public void CommandHandlerTriesToLoadEntityCommands()
+        public void CommandHandlerTriesToLoadEntityEvents()
         {
             var subject = this.GetSubject(new List<Type> { typeof(Entity1) });
 
@@ -49,14 +46,14 @@ namespace Karmr.DomainUnitTests.Commands
         }
 
         [Test]
-        public void CommandHandlerPersistsCommandToRepository()
+        public void CommandHandlerPersistsEventsToRepository()
         {
             var subject = this.GetSubject(new List<Type> { typeof(Entity1) });
 
             var command = new DummyCommand1();
             subject.Handle(command);
 
-            this.mockRepo.Verify(x => x.Save(command), Times.Once);
+            this.mockRepo.Verify(x => x.Save(It.IsAny<DummyEvent1>(), 0), Times.Once);
         }
 
         private CommandHandler GetSubject(IEnumerable<Type> entityTypes)
@@ -71,16 +68,28 @@ namespace Karmr.DomainUnitTests.Commands
             }
         }
 
-        internal class Entity1 : Entity
+        private class Entity1 : Entity
         {
-            internal Entity1(IEnumerable<Event> events) : base(events) { }
+            private Entity1(IEnumerable<IEvent> events) : base(events) { }
 
-            private void Handle(DummyCommand1 command) { }
+            private void Handle(DummyCommand1 command)
+            {
+                this.Raise(new DummyEvent1());
+            }
+
+            private void Apply(DummyEvent1 @event) { }
         }
 
-        internal class Entity2 : Entity
+        private class DummyEvent1 : Event
         {
-            internal Entity2(IEnumerable<Event> events) : base(events) { }
+            internal DummyEvent1() : base(Guid.Empty, Guid.Empty)
+            {
+            }
+        }
+
+        private class Entity2 : Entity
+        {
+            private Entity2(IEnumerable<IEvent> events) : base(events) { }
 
             private void Handle(DummyCommand1 command) { }
         }
