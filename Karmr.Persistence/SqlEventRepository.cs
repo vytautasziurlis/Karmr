@@ -17,9 +17,9 @@
 
         private const string SelectSql = @"SELECT [Sequence], [EventType], [EventPayload] FROM [dbo].[Events] WHERE EntityKey = @EntityKey ORDER BY [Sequence]";
 
-        private readonly string connectionString;
-
         private readonly JsonSerializerSettings jsonSettings = new JsonSerializerSettings { ContractResolver = new JsonContractResolver() };
+
+        private readonly string connectionString;
 
         public SqlEventRepository(string connectionString)
         {
