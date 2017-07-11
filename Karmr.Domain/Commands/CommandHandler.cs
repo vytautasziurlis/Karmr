@@ -42,7 +42,7 @@ namespace Karmr.Domain.Commands
             var sequenceNumber = entity.Events.Count - uncommittedEvents.Count;
             foreach (var @event in uncommittedEvents)
             {
-                this.repository.Save(@event, entity.GetType(), sequenceNumber);
+                this.repository.Save(entity.GetType(), command.EntityKey, @event, sequenceNumber);
                 sequenceNumber++;
             }
         }
@@ -50,7 +50,7 @@ namespace Karmr.Domain.Commands
         private Entity GetEntityInstance(Type commandType, Guid entityKey)
         {
             var entityType = this.GetEntityType(commandType);
-            var @params = new object[] { this.clock, this.repository.Get(entityType, entityKey) };
+            var @params = new object[] { this.clock, this.repository.Get(entityKey) };
 
             return Activator.CreateInstance(entityType, this.BindingFlags, null, @params, null) as Entity;
         }

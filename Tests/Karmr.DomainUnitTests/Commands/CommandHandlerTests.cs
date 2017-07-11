@@ -46,7 +46,7 @@
             var command = new DummyCommand1();
             subject.Handle(command);
 
-            this.mockRepo.Verify(x => x.Get(typeof(Entity1), command.EntityKey), Times.Once);
+            this.mockRepo.Verify(x => x.Get(command.EntityKey), Times.Once);
         }
 
         [Test]
@@ -57,7 +57,7 @@
             var command = new DummyCommand1();
             subject.Handle(command);
 
-            this.mockRepo.Verify(x => x.Save(It.IsAny<DummyEvent1>(), typeof(Entity1), 0), Times.Once);
+            this.mockRepo.Verify(x => x.Save(typeof(Entity1), command.EntityKey, It.IsAny<DummyEvent1>(), 0), Times.Once);
         }
 
         private CommandHandler GetSubject(IEnumerable<Type> entityTypes)

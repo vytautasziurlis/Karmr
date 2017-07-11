@@ -5,8 +5,8 @@
 
     public interface IEventRepository
     {
-        void Save(IEvent @event, Type entityType, int sequenceNumber);
+        void Save(Type entityType, Guid entityKey, IEvent @event, int sequenceNumber);
 
-        IEnumerable<IEvent> Get(Type entityType, Guid entityKey);
+        IEnumerable<IEvent> Get(Guid entityKey);
     }
 }
