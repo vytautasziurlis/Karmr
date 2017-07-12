@@ -13,7 +13,7 @@
     internal class SqlEventRepository : IEventRepository
     {
         private const string InsertSql = @"IF ((SELECT COUNT(*) FROM [dbo].[Events] WHERE EntityKey = @EntityKey) <> @Sequence) RAISERROR('Out of sequence event detected', 18, 0)
-                                            INSERT INTO [dbo].[Events] ([EntityType], [EntityKey], [Sequence], [EventType], [EventPayload])
+                                           ELSE INSERT INTO [dbo].[Events] ([EntityType], [EntityKey], [Sequence], [EventType], [EventPayload])
                                             VALUES (@EntityType, @EntityKey, @Sequence, @EventType, @EventPayload)";
 
         private const string SelectSql = @"SELECT [Sequence], [EventType], [EventPayload] FROM [dbo].[Events] WHERE EntityKey = @EntityKey ORDER BY [Sequence]";
