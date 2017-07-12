@@ -4,9 +4,9 @@
 
     public class UpdateListingCommand : Command
     {
-        public string Description { get; private set; }
+        public string Description { get; }
 
-        public UpdateListingCommand(Guid userId, string description) : base(userId)
+        public UpdateListingCommand(Guid entityKey, Guid userId, string description) : base(entityKey, userId)
         {
             this.Description = description;
         }

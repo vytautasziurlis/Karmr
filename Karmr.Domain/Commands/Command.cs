@@ -13,6 +13,12 @@ namespace Karmr.Domain.Commands
 
         public Guid UserId { get; }
 
+        protected Command(Guid entityKey, Guid userId)
+        {
+            this.EntityKey = entityKey;
+            this.UserId = userId;
+        }
+
         protected Command(Guid userId)
         {
             this.EntityKey = Guid.NewGuid();
