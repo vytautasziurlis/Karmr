@@ -1,47 +1,75 @@
 ﻿namespace Karmr.IntegrationTests.Persistence
 {
+    using Karmr.Contracts;
+    using Karmr.Domain.Entities;
+    using Karmr.Domain.Events;
+    using Karmr.Persistence;
+    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Data.SqlClient;
     using System.Linq;
-
-    using Karmr.Contracts;
-    using Karmr.Domain.Entities;
-
-    using NUnit.Framework;
-    using Karmr.Domain.Events;
-    using Karmr.Persistence;
 
     public class SqlEventRepositoryTests
     {
+        private Type entityType;
+        private Guid entityKey;
+        private TestEvent @event;
+        private SqlEventRepository subject;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.entityType = typeof(TestEntity);
+            this.entityKey = Guid.NewGuid();
+            this.@event = new TestEvent(this.entityKey, Guid.NewGuid(), "description", DateTime.UtcNow);
+            this.subject = new SqlEventRepository(ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString);
+        }
+
+        [Test]
+        public void SavingEventWithNegativeSequenceThrowsException()
+        {
+            Assert.Throws<Exception>(() => this.subject.Save(this.entityType, this.entityKey, this.@event, -1));
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void SavingFirstEventEventWithNonZeroSequenceThrowsException(int sequenceNumber)
+        {
+            Assert.Throws<SqlException>(() => this.subject.Save(this.entityType, this.entityKey, this.@event, sequenceNumber));
+        }
+
+        [TestCase(0)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void SavingOutOfSequenceEventThrowsException(int sequenceNumber)
+        {
+            this.subject.Save(this.entityType, this.entityKey, this.@event, 0);
+
+            Assert.Throws<SqlException>(() => this.subject.Save(this.entityType, this.entityKey, this.@event, sequenceNumber));
+        }
+
         [Test]
         public void SavingEventAddsRowToEventsTable()
         {
-            var entityType = typeof(TestEntity);
-            var entityKey = Guid.NewGuid();
-            var @event = new TestEvent(entityKey, Guid.NewGuid(), "description", DateTime.UtcNow);
-            var subject = new SqlEventRepository(ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString);
+            this.subject.Save(this.entityType, this.entityKey, this.@event, 0);
 
-            subject.Save(entityType, entityKey, @event, 0);
-
-            var savedEvent = subject.Get(@event.EntityKey).First() as TestEvent;
+            var savedEvent = this.subject.Get(this.@event.EntityKey).First() as TestEvent;
             Assert.NotNull(savedEvent);
-            Assert.AreEqual(@event.EntityKey, savedEvent.EntityKey);
-            Assert.AreEqual(@event.UserId, savedEvent.UserId);
-            Assert.AreEqual(@event.Description, savedEvent.Description);
-            Assert.AreEqual(@event.Timestamp, savedEvent.Timestamp);
+            Assert.AreEqual(this.@event.EntityKey, savedEvent.EntityKey);
+            Assert.AreEqual(this.@event.UserId, savedEvent.UserId);
+            Assert.AreEqual(this.@event.Description, savedEvent.Description);
+            Assert.AreEqual(this.@event.Timestamp, savedEvent.Timestamp);
         }
 
         [Test]
         public void SavingSameEventTwiceThrowsException()
         {
-            var entityType = typeof(TestEntity);
-            var entityKey = Guid.NewGuid();
-            var @event = new TestEvent(entityKey, Guid.NewGuid(), "description", DateTime.UtcNow);
-            var subject = new SqlEventRepository(ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString);
-            subject.Save(entityType, entityKey, @event, 0);
+            this.subject.Save(this.entityType, this.entityKey, this.@event, 0);
 
-            Assert.Throws<System.Data.SqlClient.SqlException>(() => subject.Save(entityType, entityKey, @event, 0));
+            Assert.Throws<SqlException>(() => this.subject.Save(this.entityType, this.entityKey, this.@event, 0));
         }
 
         internal class TestEntity : Entity

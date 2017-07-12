@@ -12,7 +12,8 @@
 
     internal class SqlEventRepository : IEventRepository
     {
-        private const string InsertSql = @"INSERT INTO [dbo].[Events] ([EntityType], [EntityKey], [Sequence], [EventType], [EventPayload])
+        private const string InsertSql = @"IF ((SELECT COUNT(*) FROM [dbo].[Events] WHERE EntityKey = @EntityKey) <> @Sequence) RAISERROR('Out of sequence event detected', 18, 0)
+                                            INSERT INTO [dbo].[Events] ([EntityType], [EntityKey], [Sequence], [EventType], [EventPayload])
                                             VALUES (@EntityType, @EntityKey, @Sequence, @EventType, @EventPayload)";
 
         private const string SelectSql = @"SELECT [Sequence], [EventType], [EventPayload] FROM [dbo].[Events] WHERE EntityKey = @EntityKey ORDER BY [Sequence]";
@@ -28,6 +29,11 @@
 
         public void Save(Type entityType, Guid entityKey, IEvent @event, int sequenceNumber)
         {
+            if (sequenceNumber < 0)
+            {
+                throw new Exception("Event sequence number must be equal to greater than 0");
+            }
+
             var eventTypeName = @event.GetType().AssemblyQualifiedName;
             var eventPayload = JsonConvert.SerializeObject(@event, this.jsonSettings);
 
