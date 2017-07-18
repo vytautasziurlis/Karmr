@@ -55,19 +55,15 @@
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\ListingUpdated.cs" />
     <Compile Include="Events\ListingCreated.cs" />
-    <Compile Include="Infrastructure\CommandValidationException.cs" />
-    <Compile Include="Infrastructure\UnhandledEventException.cs" />
-    <Compile Include="Infrastructure\UnhandledCommandException.cs" />
-    <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Karmr.Contracts\Karmr.Contracts.csproj">
-      <Project>{4a4033a0-db64-4de9-a14d-ad9450b1acd7}</Project>
-      <Name>Karmr.Contracts</Name>
+    <ProjectReference Include="..\Karmr.Common\Karmr.Common.csproj">
+      <Project>{985d4616-c3b7-4287-97dc-04d61b51d4a2}</Project>
+      <Name>Karmr.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

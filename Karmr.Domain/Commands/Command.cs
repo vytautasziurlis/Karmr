@@ -1,9 +1,9 @@
 ﻿using System;
-using Karmr.Contracts;
+using Karmr.Common.Contracts;
 using System.Reflection;
 using System.Linq;
 using FluentValidation;
-using Karmr.Domain.Infrastructure;
+using Karmr.Common.Infrastructure;
 
 namespace Karmr.Domain.Commands
 {

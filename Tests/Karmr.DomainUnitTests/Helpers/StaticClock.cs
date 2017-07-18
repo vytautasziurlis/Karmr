@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     internal class StaticClock : IClock
     {
         private readonly DateTime now;

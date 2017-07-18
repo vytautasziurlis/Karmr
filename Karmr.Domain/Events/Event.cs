@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
 
     internal abstract class Event : IEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace Karmr.Domain.Infrastructure
+﻿namespace Karmr.Common.Infrastructure
 {
     using System;
 

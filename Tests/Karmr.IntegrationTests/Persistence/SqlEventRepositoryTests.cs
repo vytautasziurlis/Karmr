@@ -1,6 +1,6 @@
 ﻿namespace Karmr.IntegrationTests.Persistence
 {
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Entities;
     using Karmr.Domain.Events;
     using Karmr.Persistence;

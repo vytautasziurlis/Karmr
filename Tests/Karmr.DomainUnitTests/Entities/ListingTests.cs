@@ -1,7 +1,7 @@
 ﻿namespace Karmr.DomainUnitTests.Entities
 {
     using Builders;
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Entities;
     using Karmr.Domain.Events;

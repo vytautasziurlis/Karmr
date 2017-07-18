@@ -56,9 +56,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Karmr.Contracts\Karmr.Contracts.csproj">
-      <Project>{4a4033a0-db64-4de9-a14d-ad9450b1acd7}</Project>
-      <Name>Karmr.Contracts</Name>
+    <ProjectReference Include="..\..\Karmr.Common\Karmr.Common.csproj">
+      <Project>{985d4616-c3b7-4287-97dc-04d61b51d4a2}</Project>
+      <Name>Karmr.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Karmr.Domain\Karmr.Domain.csproj">
       <Project>{cb54ae4c-8ae3-4c6b-8241-bf87849be923}</Project>
@@ -68,6 +68,9 @@
       <Project>{93dd310d-f252-4462-b744-ced39e0b090e}</Project>
       <Name>Karmr.Persistence</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

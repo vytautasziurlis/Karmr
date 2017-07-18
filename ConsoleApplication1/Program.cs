@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Reflection;
 
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Events;
 

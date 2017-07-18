@@ -1,10 +1,10 @@
 ﻿namespace Karmr.DomainUnitTests.Entities
 {
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Entities;
     using Karmr.Domain.Events;
-    using Karmr.Domain.Infrastructure;
+    using Karmr.Common.Infrastructure;
     using NUnit.Framework;
     using System;
     using System.Collections.Generic;
@@ -66,7 +66,7 @@
         [Test]
         public void ExceptionIsBubbledUpWhenHandlingCommandThrows()
         {
-            Action<ConcreteEntity, Command> handleFunction = (entity, command) => throw new Exception();
+            Action<ConcreteEntity, Command> handleFunction = (entity, command) => { throw new Exception(); };
             var subject = this.GetSubject(new List<IEvent>(), handleFunction);
             Assert.Throws<Exception>(() => subject.Handle(new ConcreteCommand()));
         }

@@ -1,4 +1,4 @@
-﻿using Karmr.Domain.Helpers;
+﻿using Karmr.Common.Helpers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

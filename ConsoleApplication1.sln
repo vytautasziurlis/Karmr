@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{AC010C8F-5F40-4525-AAFB-A45373824A4B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karmr.Domain", "Karmr.Domain\Karmr.Domain.csproj", "{CB54AE4C-8AE3-4C6B-8241-BF87849BE923}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karmr.Contracts", "Karmr.Contracts\Karmr.Contracts.csproj", "{4A4033A0-DB64-4DE9-A14D-AD9450B1ACD7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karmr.Persistence", "Karmr.Persistence\Karmr.Persistence.csproj", "{93DD310D-F252-4462-B744-CED39E0B090E}"
 EndProject
@@ -16,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karmr.IntegrationTests", "Tests\Karmr.IntegrationTests\Karmr.IntegrationTests.csproj", "{7EEEC156-4269-47ED-92C9-B2DC1C96A54E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karmr.DomainUnitTests", "Tests\Karmr.DomainUnitTests\Karmr.DomainUnitTests.csproj", "{88A14B26-67FF-4217-A9D2-0AEF7AFED8D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Karmr.Common", "Karmr.Common\Karmr.Common.csproj", "{985D4616-C3B7-4287-97DC-04D61B51D4A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +31,6 @@ Global
 		{CB54AE4C-8AE3-4C6B-8241-BF87849BE923}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB54AE4C-8AE3-4C6B-8241-BF87849BE923}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB54AE4C-8AE3-4C6B-8241-BF87849BE923}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A4033A0-DB64-4DE9-A14D-AD9450B1ACD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A4033A0-DB64-4DE9-A14D-AD9450B1ACD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A4033A0-DB64-4DE9-A14D-AD9450B1ACD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A4033A0-DB64-4DE9-A14D-AD9450B1ACD7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{93DD310D-F252-4462-B744-CED39E0B090E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{93DD310D-F252-4462-B744-CED39E0B090E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93DD310D-F252-4462-B744-CED39E0B090E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +43,10 @@ Global
 		{88A14B26-67FF-4217-A9D2-0AEF7AFED8D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88A14B26-67FF-4217-A9D2-0AEF7AFED8D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88A14B26-67FF-4217-A9D2-0AEF7AFED8D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985D4616-C3B7-4287-97DC-04D61B51D4A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985D4616-C3B7-4287-97DC-04D61B51D4A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985D4616-C3B7-4287-97DC-04D61B51D4A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985D4616-C3B7-4287-97DC-04D61B51D4A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

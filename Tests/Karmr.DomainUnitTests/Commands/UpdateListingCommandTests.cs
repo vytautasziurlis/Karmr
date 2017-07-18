@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Karmr.Domain.Commands;
 using Karmr.DomainUnitTests.Builders;
-using Karmr.Domain.Infrastructure;
+using Karmr.Common.Infrastructure;
 
 namespace Karmr.DomainUnitTests.Commands
 {

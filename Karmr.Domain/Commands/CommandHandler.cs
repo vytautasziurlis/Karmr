@@ -6,10 +6,10 @@ namespace Karmr.Domain.Commands
 {
     using System.Reflection;
 
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Entities;
-    using Helpers;
-    using Infrastructure;
+    using Karmr.Common.Helpers;
+    using Karmr.Common.Infrastructure;
 
     public sealed class CommandHandler
     {

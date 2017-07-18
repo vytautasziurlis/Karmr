@@ -5,7 +5,7 @@
     using System.Data.SqlClient;
     using System.Linq;
 
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
 
     using Newtonsoft.Json;
     using Dapper;

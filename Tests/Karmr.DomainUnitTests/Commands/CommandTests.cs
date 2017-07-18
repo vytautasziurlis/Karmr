@@ -1,6 +1,6 @@
 ﻿namespace Karmr.DomainUnitTests.Commands
 {
-    using Domain.Helpers;
+    using Karmr.Common.Helpers;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Entities;
     using Karmr.DomainUnitTests.Helpers;

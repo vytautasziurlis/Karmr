@@ -1,9 +1,9 @@
 ﻿namespace Karmr.Domain.Entities
 {
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Events;
-    using Karmr.Domain.Helpers;
-    using Karmr.Domain.Infrastructure;
+    using Karmr.Common.Helpers;
+    using Karmr.Common.Infrastructure;
     using System;
     using System.Collections.Generic;
     using System.Linq;

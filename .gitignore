@@ -3,19 +3,7 @@
 ################################################################################
 
 /packages
-/ConsoleApplication1/bin
-/ConsoleApplication1/obj
-/Karmr.DomainUnitTests/obj
-/Karmr.DomainUnitTests/bin
-/Karmr.Domain/obj
-/Karmr.Domain/bin
-/Karmr.Contracts/obj
-/Karmr.Contracts/bin
+bin/
+obj/
 *.suo
 /.vs
-/Karmr.Persistence/obj
-/Tests/Karmr.IntegrationTests/obj
-/Karmr.Persistence/bin
-/Tests/Karmr.DomainUnitTests/bin
-/Tests/Karmr.DomainUnitTests/obj
-/Tests/Karmr.IntegrationTests/bin

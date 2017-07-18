@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Events;
 

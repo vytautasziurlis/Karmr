@@ -1,10 +1,10 @@
 ﻿namespace Karmr.DomainUnitTests.Commands
 {
-    using Karmr.Contracts;
+    using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
     using Karmr.Domain.Entities;
     using Karmr.Domain.Events;
-    using Karmr.Domain.Infrastructure;
+    using Karmr.Common.Infrastructure;
     using Moq;
     using NUnit.Framework;
     using System;
