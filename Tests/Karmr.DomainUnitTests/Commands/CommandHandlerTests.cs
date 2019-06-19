@@ -2,6 +2,7 @@
 {
     using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
+    using Karmr.Domain.Denormalizers;
     using Karmr.Domain.Entities;
     using Karmr.Domain.Events;
     using Karmr.Common.Infrastructure;
@@ -17,11 +18,13 @@
         private readonly IClock clock = new StaticClock(DateTime.UtcNow);
 
         private Mock<IEventRepository> mockRepo;
+        private Mock<IDenormalizerRepository> mockDenormalizerRepo;
 
         [SetUp]
         public void Setup()
         {
             this.mockRepo = new Mock<IEventRepository>();
+            this.mockDenormalizerRepo = new Mock<IDenormalizerRepository>();
         }
 
         [Test]
@@ -62,7 +65,7 @@
 
         private CommandHandler GetSubject(IEnumerable<Type> entityTypes)
         {
-            return new CommandHandler(this.clock, this.mockRepo.Object, entityTypes);
+            return new CommandHandler(this.clock, this.mockRepo.Object, this.mockDenormalizerRepo.Object, entityTypes, new List<Type> { typeof(DummyDenormalizer1) });
         }
 
         private class DummyCommand1 : Command
@@ -96,6 +99,13 @@
             private Entity2(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
             private void Handle(DummyCommand1 command) { }
+        }
+
+        private class DummyDenormalizer1 : Denormalizer
+        {
+            private DummyDenormalizer1(IDenormalizerRepository repository) : base(repository) { }
+
+            private void Apply(DummyEvent1 @event) { }
         }
     }
 }

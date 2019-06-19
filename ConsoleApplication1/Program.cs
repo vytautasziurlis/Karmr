@@ -1,61 +1,44 @@
-﻿namespace ConsoleApplication1
+﻿using System;
+using System.Collections.Generic;
+using Karmr.Domain.Commands;
+using Karmr.Common.Contracts;
+using Karmr.Persistence;
+using Karmr.Domain.Entities;
+using Karmr.Domain.Denormalizers;
+
+namespace ConsoleApplication1
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-
-    using Karmr.Common.Contracts;
-    using Karmr.Domain.Commands;
-    using Karmr.Domain.Events;
-
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
-
     class Program
     {
         static void Main(string[] args)
         {
-            //var command = new CreateListingCommand(Guid.NewGuid(), "description");
-            //var typeName = command.GetType().AssemblyQualifiedName;
-            
+            var clock = new SystemClock();
+            var eventRepository = new SqlEventRepository("Server=.;Database=Karmr;User Id=Karmr;Password=Karmr;");
+            var denormalizerRepository = new DenormalizerRepository("Server=.;Database=Karmr;User Id=Karmr;Password=Karmr;");
+            var entityTypes = new List<Type> { typeof(Listing) };
+            var denormalizerTypes = new List<Type> { typeof(ListingDenormalizer) };
 
-            //string serialized = JsonConvert.SerializeObject(command);
+            var commandHandler = new CommandHandler(clock, eventRepository, denormalizerRepository, entityTypes, denormalizerTypes);
 
-            //Console.WriteLine(serialized);
+            // handle some commands
+            var command1 = new CreateListingCommand(Guid.NewGuid(), "Listing 1 description");
+            //commandHandler.Handle(command1);
 
-            //var type = Type.GetType(typeName);
+            var command2 = new CreateListingCommand(Guid.NewGuid(), "Listing 2 description");
+            //commandHandler.Handle(command2);
 
-            //ICommand deserialized = (ICommand)JsonConvert.DeserializeObject(serialized, type);
+            var command3 = new UpdateListingCommand(
+                new Guid("0B45F610-FF87-4C8D-B860-9E68D15A77BA"),
+                new Guid("87316104-CE1E-4C9D-8F1F-736B2F77086E"),
+                "Listing 2 updated description");
+            commandHandler.Handle(command3);
 
-            //Console.ReadKey();
-
-            //var @event = new ListingCreated(Guid.NewGuid(), Guid.NewGuid(), "description", DateTime.UtcNow);
-
-            //var eventTypeName = @event.GetType().AssemblyQualifiedName;
-
-            //var settings = new JsonSerializerSettings { ContractResolver = new MyContractResolver() };
-            //var serializedEvent = JsonConvert.SerializeObject(@event, settings);
-            //Console.WriteLine(serializedEvent);
-            //var eventType = Type.GetType(eventTypeName);
-
-            
-
-
-            //IEvent deserializedEvent = (IEvent)JsonConvert.DeserializeObject(serializedEvent, eventType, settings);
-            //Console.ReadKey();
+            Console.ReadKey();
         }
+    }
 
-        public class MyContractResolver : Newtonsoft.Json.Serialization.DefaultContractResolver
-        {
-            protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
-            {
-                var props = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                    .Select(p => base.CreateProperty(p, memberSerialization))
-                    .ToList();
-                props.ForEach(p => { p.Writable = true; p.Readable = true; });
-                return props;
-            }
-        }
+    public class SystemClock : IClock
+    {
+        public DateTime UtcNow => DateTime.UtcNow;
     }
 }
