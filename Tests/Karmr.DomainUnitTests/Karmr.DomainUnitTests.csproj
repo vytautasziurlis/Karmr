@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Denormalizers\DenormalizerTests.cs" />
+    <Compile Include="Denormalizers\ListingDenormalizerTests.cs" />
     <Compile Include="Entities\ListingTests.cs" />
     <Compile Include="Builders\CommandBuilder.cs" />
     <Compile Include="Builders\CommandBuilderHelper.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="Commands\UpdateListingCommandTests.cs" />
     <Compile Include="Commands\CreateListingCommandTests.cs" />
     <Compile Include="Events\EventTests.cs" />
+    <Compile Include="Helpers\Asserts.cs" />
     <Compile Include="Helpers\StaticClock.cs" />
     <Compile Include="Helpers\TypeExtensionTests.cs" />
     <Compile Include="Commands\CommandTests.cs" />
