@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Denormalizers\DenormalizerHandlerTests.cs" />
     <Compile Include="Denormalizers\DenormalizerTests.cs" />
     <Compile Include="Denormalizers\ListingDenormalizerTests.cs" />
     <Compile Include="Entities\ListingTests.cs" />

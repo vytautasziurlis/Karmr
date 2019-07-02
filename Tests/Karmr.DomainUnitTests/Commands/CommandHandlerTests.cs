@@ -2,7 +2,6 @@
 {
     using Karmr.Common.Contracts;
     using Karmr.Domain.Commands;
-    using Karmr.Domain.Denormalizers;
     using Karmr.Domain.Entities;
     using Karmr.Domain.Events;
     using Karmr.Common.Infrastructure;
@@ -18,13 +17,13 @@
         private readonly IClock clock = new StaticClock(DateTime.UtcNow);
 
         private Mock<IEventRepository> mockRepo;
-        private Mock<IDenormalizerRepository> mockDenormalizerRepo;
+        private Mock<IDenormalizerHandler> mockDenormalizerHandler;
 
         [SetUp]
         public void Setup()
         {
             this.mockRepo = new Mock<IEventRepository>();
-            this.mockDenormalizerRepo = new Mock<IDenormalizerRepository>();
+            this.mockDenormalizerHandler = new Mock<IDenormalizerHandler>();
         }
 
         [Test]
@@ -63,9 +62,20 @@
             this.mockRepo.Verify(x => x.Save(typeof(Entity1), command.EntityKey, It.IsAny<DummyEvent1>(), 0), Times.Once);
         }
 
+        [Test]
+        public void CommandHandlerCallsDenormalizerHandler()
+        {
+            var subject = this.GetSubject(new List<Type> { typeof(Entity1) });
+
+            var command = new DummyCommand1();
+            subject.Handle(command);
+
+            this.mockDenormalizerHandler.Verify(x => x.Handle(It.IsAny<IEnumerable<IEvent>>()), Times.Once);
+        }
+
         private CommandHandler GetSubject(IEnumerable<Type> entityTypes)
         {
-            return new CommandHandler(this.clock, this.mockRepo.Object, this.mockDenormalizerRepo.Object, entityTypes, new List<Type> { typeof(DummyDenormalizer1) });
+            return new CommandHandler(this.clock, this.mockRepo.Object, entityTypes, this.mockDenormalizerHandler.Object);
         }
 
         private class DummyCommand1 : Command
@@ -99,13 +109,6 @@
             private Entity2(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
             private void Handle(DummyCommand1 command) { }
-        }
-
-        private class DummyDenormalizer1 : Denormalizer
-        {
-            private DummyDenormalizer1(IDenormalizerRepository repository) : base(repository) { }
-
-            private void Apply(DummyEvent1 @event) { }
         }
     }
 }

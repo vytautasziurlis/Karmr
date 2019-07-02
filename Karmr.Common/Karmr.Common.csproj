@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Contracts\IClock.cs" />
     <Compile Include="Contracts\ICommand.cs" />
+    <Compile Include="Contracts\IDenormalizerHandler.cs" />
     <Compile Include="Contracts\IDenormalizerRepository.cs" />
     <Compile Include="Contracts\IEvent.cs" />
     <Compile Include="Contracts\IEventRepository.cs" />
