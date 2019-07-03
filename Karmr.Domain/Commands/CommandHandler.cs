@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+
+using Karmr.Common.Contracts;
+using Karmr.Domain.Entities;
+using Karmr.Common.Helpers;
+using Karmr.Common.Infrastructure;
 
 namespace Karmr.Domain.Commands
 {
-    using System.Reflection;
-
-    using Karmr.Common.Contracts;
-    using Karmr.Domain.Entities;
-    using Karmr.Common.Helpers;
-    using Karmr.Common.Infrastructure;
-
     public sealed class CommandHandler
     {
         private readonly BindingFlags BindingFlags = BindingFlags.NonPublic
@@ -25,11 +24,14 @@ namespace Karmr.Domain.Commands
 
         private readonly Dictionary<Type, Type> commandEntities = new Dictionary<Type, Type>();
 
-        public CommandHandler(IClock clock, IEventRepository repository, IEnumerable<Type> entityTypes)
+        private readonly IDenormalizerHandler denormalizerHandler;
+
+        public CommandHandler(IClock clock, IEventRepository repository, IEnumerable<Type> entityTypes, IDenormalizerHandler denormalizerHandler)
         {
             this.clock = clock;
             this.repository = repository;
             this.entityTypes = entityTypes;
+            this.denormalizerHandler = denormalizerHandler;
         }
 
         public void Handle(ICommand command)
@@ -45,6 +47,9 @@ namespace Karmr.Domain.Commands
                 this.repository.Save(entity.GetType(), command.EntityKey, @event, sequenceNumber);
                 sequenceNumber++;
             }
+
+            // send events to denormalizers
+            this.denormalizerHandler.Handle(uncommittedEvents);
         }
 
         private Entity GetEntityInstance(Type commandType, Guid entityKey)
@@ -68,7 +73,7 @@ namespace Karmr.Domain.Commands
                 {
                     throw new UnhandledCommandException(string.Format("Expected exactly one entity to handle command {0}, found {1} instead.",
                         commandType,
-                        this.entityTypes.Count()));
+                        matchingEntityTypes.Count));
                 }
 
                 this.commandEntities.Add(commandType, matchingEntityTypes.First());

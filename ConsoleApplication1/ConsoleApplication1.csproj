@@ -63,6 +63,10 @@
       <Project>{cb54ae4c-8ae3-4c6b-8241-bf87849be923}</Project>
       <Name>Karmr.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Karmr.Persistence\Karmr.Persistence.csproj">
+      <Project>{93dd310d-f252-4462-b744-ced39e0b090e}</Project>
+      <Name>Karmr.Persistence</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,11 +17,13 @@
         private readonly IClock clock = new StaticClock(DateTime.UtcNow);
 
         private Mock<IEventRepository> mockRepo;
+        private Mock<IDenormalizerHandler> mockDenormalizerHandler;
 
         [SetUp]
         public void Setup()
         {
             this.mockRepo = new Mock<IEventRepository>();
+            this.mockDenormalizerHandler = new Mock<IDenormalizerHandler>();
         }
 
         [Test]
@@ -60,9 +62,20 @@
             this.mockRepo.Verify(x => x.Save(typeof(Entity1), command.EntityKey, It.IsAny<DummyEvent1>(), 0), Times.Once);
         }
 
+        [Test]
+        public void CommandHandlerCallsDenormalizerHandler()
+        {
+            var subject = this.GetSubject(new List<Type> { typeof(Entity1) });
+
+            var command = new DummyCommand1();
+            subject.Handle(command);
+
+            this.mockDenormalizerHandler.Verify(x => x.Handle(It.IsAny<IEnumerable<IEvent>>()), Times.Once);
+        }
+
         private CommandHandler GetSubject(IEnumerable<Type> entityTypes)
         {
-            return new CommandHandler(this.clock, this.mockRepo.Object, entityTypes);
+            return new CommandHandler(this.clock, this.mockRepo.Object, entityTypes, this.mockDenormalizerHandler.Object);
         }
 
         private class DummyCommand1 : Command

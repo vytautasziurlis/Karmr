@@ -50,6 +50,9 @@
     <Compile Include="Commands\UpdateListingCommand.cs" />
     <Compile Include="CommandValidators\UpdateListingCommandValidator.cs" />
     <Compile Include="CommandValidators\CreateListingCommandValidator.cs" />
+    <Compile Include="Denormalizers\Denormalizer.cs" />
+    <Compile Include="Denormalizers\DenormalizerHandler.cs" />
+    <Compile Include="Denormalizers\ListingDenormalizer.cs" />
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Listing.cs" />
     <Compile Include="Events\Event.cs" />

@@ -10,7 +10,7 @@
     using Newtonsoft.Json;
     using Dapper;
 
-    internal class SqlEventRepository : IEventRepository
+    public class SqlEventRepository : IEventRepository
     {
         private const string InsertSql = @"IF ((SELECT COUNT(*) FROM [dbo].[Events] WHERE EntityKey = @EntityKey) <> @Sequence) RAISERROR('Out of sequence event detected', 18, 0)
                                            ELSE INSERT INTO [dbo].[Events] ([EntityType], [EntityKey], [Sequence], [EventType], [EventPayload])
