@@ -51,6 +51,7 @@
     <Compile Include="Contracts\IDenormalizerRepository.cs" />
     <Compile Include="Contracts\IEvent.cs" />
     <Compile Include="Contracts\IEventRepository.cs" />
+    <Compile Include="Contracts\IQueryRepository.cs" />
     <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Infrastructure\CommandValidationException.cs" />
     <Compile Include="Infrastructure\UnhandledCommandException.cs" />

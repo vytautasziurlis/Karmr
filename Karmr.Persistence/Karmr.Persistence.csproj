@@ -51,6 +51,7 @@
     <Compile Include="JsonContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DenormalizerRepository.cs" />
+    <Compile Include="QueryRepository.cs" />
     <Compile Include="SqlEventRepository.cs" />
   </ItemGroup>
   <ItemGroup>

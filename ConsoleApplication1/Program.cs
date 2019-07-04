@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Karmr.Domain.Commands;
 using Karmr.Common.Contracts;
 using Karmr.Persistence;
 using Karmr.Domain.Entities;
 using Karmr.Domain.Denormalizers;
+using Karmr.Domain.Queries;
 
 namespace ConsoleApplication1
 {
@@ -23,11 +25,15 @@ namespace ConsoleApplication1
             var commandHandler = new CommandHandler(clock, eventRepository, entityTypes, denormalizerHandler);
 
             // handle some commands
-            var command1 = new CreateListingCommand(Guid.NewGuid(), "Listing 1 description");
-            commandHandler.Handle(command1);
+            //var command1 = new CreateListingCommand(Guid.NewGuid(), "Listing 1 description");
+            //commandHandler.Handle(command1);
 
-            var command2 = new CreateListingCommand(Guid.NewGuid(), "Listing 2 description");
-            commandHandler.Handle(command2);
+            //var command2 = new CreateListingCommand(Guid.NewGuid(), "Listing 2 description");
+            //commandHandler.Handle(command2);
+
+            var queryRepo = new QueryRepository("Server=.;Database=Karmr;User Id=Karmr;Password=Karmr;");
+            var listingQueries = new ListingQueries(queryRepo);
+            var listings = listingQueries.GetAll();
 
             //var command3 = new UpdateListingCommand(
             //    new Guid("0B45F610-FF87-4C8D-B860-9E68D15A77BA"),
@@ -35,6 +41,14 @@ namespace ConsoleApplication1
             //    "Listing 2 updated description");
             //commandHandler.Handle(command3);
 
+            foreach (var listing in listings)
+            {
+                Console.WriteLine($"{listing.Id.ToString()} - {listing.Description}");
+            }
+
+            var firstListing = listingQueries.GetById(listings.First().Id);
+
+            Console.WriteLine("Done.");
             Console.ReadKey();
         }
     }
