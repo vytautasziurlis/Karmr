@@ -59,6 +59,8 @@
     <Compile Include="Events\ListingUpdated.cs" />
     <Compile Include="Events\ListingCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\ListingQueries.cs" />
+    <Compile Include="Queries\Models\Listing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

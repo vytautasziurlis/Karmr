@@ -69,6 +69,7 @@
     <Compile Include="Helpers\TypeAssert.cs" />
     <Compile Include="Helpers\TypeAssertTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\ListingsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
