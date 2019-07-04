@@ -23,12 +23,13 @@ namespace Karmr.DomainUnitTests.Denormalizers
         [Test]
         public void ApplyingListingCreatedEventCallsRepository()
         {
-            var @event = new ListingCreated(Guid.NewGuid(), Guid.NewGuid(), "Description", DateTime.Now);
+            var @event = new ListingCreated(Guid.NewGuid(), Guid.NewGuid(), "Name", "Description", DateTime.Now);
 
             var expectedParams = new
             {
                 @event.EntityKey,
                 @event.UserId,
+                @event.Name,
                 @event.Description,
                 @event.Timestamp
             };
@@ -37,7 +38,7 @@ namespace Karmr.DomainUnitTests.Denormalizers
 
             this.repository.Verify(
                 x => x.Execute(
-                    "INSERT INTO ReadModel.Listing ([Id], [UserId], [Description], [Created]) VALUES (@EntityKey, @UserId, @Description, @Timestamp)",
+                    "INSERT INTO ReadModel.Listing ([Id], [UserId], [Name], [Description], [Created]) VALUES (@EntityKey, @UserId, @Name, @Description, @Timestamp)",
                     It.Is<object>(@params => Asserts.HaveSameProperties(expectedParams, @params))),
                 Times.Once);
         }
@@ -45,11 +46,12 @@ namespace Karmr.DomainUnitTests.Denormalizers
         [Test]
         public void ApplyingListingUpdatedEventCallsRepository()
         {
-            var @event = new ListingUpdated(Guid.NewGuid(), Guid.NewGuid(), "Description", DateTime.Now);
+            var @event = new ListingUpdated(Guid.NewGuid(), Guid.NewGuid(), "Name", "Description", DateTime.Now);
 
             var expectedParams = new
             {
                 @event.EntityKey,
+                @event.Name,
                 @event.Description,
                 @event.Timestamp
             };
@@ -58,7 +60,7 @@ namespace Karmr.DomainUnitTests.Denormalizers
 
             this.repository.Verify(
                 x => x.Execute(
-                    "UPDATE ReadModel.Listing SET [Description] = @Description, [Modified] = @Timestamp WHERE Id = @EntityKey",
+                    "UPDATE ReadModel.Listing SET [Name] = @Name, [Description] = @Description, [Modified] = @Timestamp WHERE Id = @EntityKey",
                     It.Is<object>(@params => Asserts.HaveSameProperties(expectedParams, @params))),
                 Times.Once);
         }

@@ -14,6 +14,7 @@ namespace Karmr.DomainUnitTests.Builders
             CommandConstructorArguments.Add(typeof(CreateListingCommand), new Dictionary<string, object>
             {
                 { "UserId", Guid.NewGuid()},
+                { "Name", "Name" },
                 { "Description", "Description"}
             });
 
@@ -21,6 +22,7 @@ namespace Karmr.DomainUnitTests.Builders
             {
                 { "EntityKey", Guid.NewGuid() },
                 { "UserId", Guid.NewGuid() },
+                { "Name", "Name" },
                 { "Description", "Description" }
             });
         }

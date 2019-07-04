@@ -25,7 +25,7 @@ namespace Karmr.DomainUnitTests.Queries
         {
             this.subject.GetAll();
 
-            this.mockRepository.Verify(x => x.Query<Listing>("SELECT [Id], [Description], [Created], [Modified] FROM ReadModel.Listing"), Times.Once);
+            this.mockRepository.Verify(x => x.Query<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing"), Times.Once);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Karmr.DomainUnitTests.Queries
             this.subject.GetById(id);
 
             this.mockRepository.Verify(
-                x => x.QuerySingle<Listing>("SELECT [Id], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [Id] = @Id",
+                x => x.QuerySingle<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [Id] = @Id",
                     It.Is<object>(@params => Asserts.HaveSameProperties(new { id }, @params))),
                 Times.Once);
         }

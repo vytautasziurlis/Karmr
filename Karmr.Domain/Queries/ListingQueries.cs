@@ -16,13 +16,13 @@ namespace Karmr.Domain.Queries
 
         public IEnumerable<Listing> GetAll()
         {
-            return this.repository.Query<Listing>("SELECT [Id], [Description], [Created], [Modified] FROM ReadModel.Listing");
+            return this.repository.Query<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing");
         }
 
         public Listing GetById(Guid id)
         {
             return this.repository.QuerySingle<Listing>(
-                "SELECT [Id], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [Id] = @Id",
+                "SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [Id] = @Id",
                 new { id });
         }
     }

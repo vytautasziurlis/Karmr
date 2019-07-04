@@ -6,6 +6,8 @@ namespace Karmr.Domain.Queries.Models
     {
         public Guid Id { get; }
 
+        public string Name { get; }
+
         public string Description { get; }
 
         public DateTime Created { get; }
