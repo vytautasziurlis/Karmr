@@ -1,4 +1,6 @@
-﻿namespace Karmr.Domain.Entities
+﻿using System.Security.Claims;
+
+namespace Karmr.Domain.Entities
 {
     using System;
     using System.Collections.Generic;
@@ -14,6 +16,8 @@
 
         internal Guid UserId { get; private set; }
 
+        internal string Name { get; private set; }
+
         internal string Description { get; private set; }
 
         internal Listing(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
@@ -24,7 +28,7 @@
             {
                 throw new Exception(string.Format("Expected empty list of events, found {0} events", this.Events.Count));
             }
-            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Description, this.Clock.UtcNow));
+            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Name, command.Description, this.Clock.UtcNow));
         }
 
         private void Handle(UpdateListingCommand command)
@@ -37,18 +41,20 @@
             {
                 throw new Exception("Permission denied");
             }
-            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Description, this.Clock.UtcNow));
+            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Name, command.Description, this.Clock.UtcNow));
         }
 
         private void Apply(ListingCreated @event)
         {
             this.Id = @event.EntityKey;
             this.UserId = @event.UserId;
+            this.Name = @event.Name;
             this.Description = @event.Description;
         }
 
         private void Apply(ListingUpdated @event)
         {
+            this.Name = @event.Name;
             this.Description = @event.Description;
         }
     }

@@ -14,7 +14,7 @@
             var connectionString = ConfigurationManager.ConnectionStrings["EventStore"].ConnectionString;
             using (var connection = new SqlConnection(connectionString))
             {
-                connection.Execute("TRUNCATE TABLE [Events]");
+                //connection.Execute("TRUNCATE TABLE [Events]");
             }
         }
     }

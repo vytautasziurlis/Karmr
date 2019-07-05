@@ -4,10 +4,13 @@
 
     public class CreateListingCommand : Command
     {
-        public string Description { get; private set; }
+        public string Name { get; }
 
-        public CreateListingCommand(Guid userId, string description) : base(userId)
+        public string Description { get; }
+
+        public CreateListingCommand(Guid userId, string name, string description) : base(userId)
         {
+            this.Name = name;
             this.Description = description;
         }
     }

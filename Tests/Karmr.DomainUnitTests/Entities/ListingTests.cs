@@ -25,6 +25,7 @@
 
             Assert.AreEqual(command.EntityKey, subject.Id);
             Assert.AreEqual(command.UserId, subject.UserId);
+            Assert.AreEqual(command.Name, subject.Name);
             Assert.AreEqual(command.Description, subject.Description);
         }
 
@@ -42,6 +43,7 @@
             Assert.NotNull(@event);
             Assert.AreEqual(command.EntityKey, @event.EntityKey);
             Assert.AreEqual(command.UserId, @event.UserId);
+            Assert.AreEqual(command.Name, @event.Name);
             Assert.AreEqual(command.Description, @event.Description);
             Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
@@ -87,11 +89,13 @@
 
             var updateCommand = new CommandBuilder<UpdateListingCommand>()
                 .With(x => x.UserId, createCommand.UserId)
+                .With(x => x.Name, createCommand.Name + " tail")
                 .With(x => x.Description, createCommand.Description + " tail")
                 .Build();
 
             subject.Handle(updateCommand);
 
+            Assert.AreEqual(updateCommand.Name, subject.Name);
             Assert.AreEqual(updateCommand.Description, subject.Description);
         }
 
@@ -104,6 +108,7 @@
 
             var updateCommand = new CommandBuilder<UpdateListingCommand>()
                 .With(x => x.UserId, createCommand.UserId)
+                .With(x => x.Name, createCommand.Name + " tail")
                 .With(x => x.Description, createCommand.Description + " tail")
                 .Build();
 
@@ -116,6 +121,7 @@
             Assert.NotNull(@event);
             Assert.AreEqual(updateCommand.EntityKey, @event.EntityKey);
             Assert.AreEqual(updateCommand.UserId, @event.UserId);
+            Assert.AreEqual(updateCommand.Name, @event.Name);
             Assert.AreEqual(updateCommand.Description, @event.Description);
             Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
