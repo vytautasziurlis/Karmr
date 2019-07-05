@@ -57,6 +57,7 @@
     <Compile Include="Infrastructure\UnhandledCommandException.cs" />
     <Compile Include="Infrastructure\UnhandledEventException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Types\GeoLocation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

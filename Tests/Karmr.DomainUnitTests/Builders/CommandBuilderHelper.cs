@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Karmr.Common.Types;
+using Karmr.Domain.Commands;
 
 namespace Karmr.DomainUnitTests.Builders
 {
-    using Karmr.Domain.Commands;
-
     internal static class CommandBuilderHelper
     {
         private static readonly Dictionary<Type, Dictionary<string, object>> CommandConstructorArguments = new Dictionary<Type, Dictionary<string, object>>();
@@ -13,9 +13,10 @@ namespace Karmr.DomainUnitTests.Builders
         {
             CommandConstructorArguments.Add(typeof(CreateListingCommand), new Dictionary<string, object>
             {
-                { "UserId", Guid.NewGuid()},
+                { "UserId", Guid.NewGuid() },
                 { "Name", "Name" },
-                { "Description", "Description"}
+                { "Description", "Description" },
+                { "Location", new GeoLocation(1.23m, 42.123m) }
             });
 
             CommandConstructorArguments.Add(typeof(UpdateListingCommand), new Dictionary<string, object>
@@ -23,7 +24,8 @@ namespace Karmr.DomainUnitTests.Builders
                 { "EntityKey", Guid.NewGuid() },
                 { "UserId", Guid.NewGuid() },
                 { "Name", "Name" },
-                { "Description", "Description" }
+                { "Description", "Description" },
+                { "Location", new GeoLocation(1.23m, 42.123m) }
             });
         }
 

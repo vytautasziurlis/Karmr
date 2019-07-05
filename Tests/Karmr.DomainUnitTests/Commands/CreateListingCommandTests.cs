@@ -29,7 +29,7 @@ namespace Karmr.DomainUnitTests.Commands
         [TestCase("\t")]
         public void NameIsRequired(string value)
         {
-            var subject = this.commandBuilder.With(x => x.Description, value).Build();
+            var subject = this.commandBuilder.With(x => x.Name, value).Build();
 
             Assert.Throws<CommandValidationException>(() => subject.Validate());
         }
@@ -40,7 +40,7 @@ namespace Karmr.DomainUnitTests.Commands
         [TestCase("\t")]
         public void DescriptionIsRequired(string value)
         {
-            var subject = this.commandBuilder.With(x => x.Name, value).Build();
+            var subject = this.commandBuilder.With(x => x.Description, value).Build();
 
             Assert.Throws<CommandValidationException>(() => subject.Validate());
         }
