@@ -1,15 +1,14 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using Karmr.Common.Contracts;
+using Karmr.Domain.Commands;
+using Karmr.Domain.Events;
+using Karmr.Common.Types;
 
 namespace Karmr.Domain.Entities
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Karmr.Common.Contracts;
-    using Karmr.Domain.Commands;
-    using Karmr.Domain.Events;
-
     internal class Listing : Entity
     {
         internal Guid Id { get; private set; }
@@ -20,6 +19,8 @@ namespace Karmr.Domain.Entities
 
         internal string Description { get; private set; }
 
+        internal GeoLocation? Location { get; private set; }
+
         internal Listing(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
         private void Handle(CreateListingCommand command)
@@ -28,7 +29,7 @@ namespace Karmr.Domain.Entities
             {
                 throw new Exception(string.Format("Expected empty list of events, found {0} events", this.Events.Count));
             }
-            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Name, command.Description, this.Clock.UtcNow));
+            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Name, command.Description, command.Location, this.Clock.UtcNow));
         }
 
         private void Handle(UpdateListingCommand command)
@@ -41,7 +42,7 @@ namespace Karmr.Domain.Entities
             {
                 throw new Exception("Permission denied");
             }
-            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Name, command.Description, this.Clock.UtcNow));
+            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Name, command.Description, command.Location, this.Clock.UtcNow));
         }
 
         private void Apply(ListingCreated @event)
@@ -50,12 +51,14 @@ namespace Karmr.Domain.Entities
             this.UserId = @event.UserId;
             this.Name = @event.Name;
             this.Description = @event.Description;
+            this.Location = @event.Location;
         }
 
         private void Apply(ListingUpdated @event)
         {
             this.Name = @event.Name;
             this.Description = @event.Description;
+            this.Location = @event.Location;
         }
     }
 }
