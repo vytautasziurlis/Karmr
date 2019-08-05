@@ -27,6 +27,12 @@ namespace Karmr.DomainUnitTests.Builders
                 { "Description", "Description" },
                 { "Location", new GeoLocation(1.23m, 42.123m) }
             });
+
+            CommandConstructorArguments.Add(typeof(ArchiveListingCommand), new Dictionary<string, object>
+            {
+                { "EntityKey", Guid.NewGuid() },
+                { "UserId", Guid.NewGuid() }
+            });
         }
 
         internal static Dictionary<string, object> GetConstructorArguments(Type type)

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ArchiveListingCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\CreateListingCommand.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Entities\Entity.cs" />
     <Compile Include="Entities\Listing.cs" />
     <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\ListingArchived.cs" />
     <Compile Include="Events\ListingUpdated.cs" />
     <Compile Include="Events\ListingCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

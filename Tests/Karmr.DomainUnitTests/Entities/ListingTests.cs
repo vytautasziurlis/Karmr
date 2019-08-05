@@ -29,6 +29,8 @@
             Assert.AreEqual(command.Name, subject.Name);
             Assert.AreEqual(command.Description, subject.Description);
             Assert.AreEqual(command.Location, subject.Location);
+            Assert.AreEqual(true, subject.IsPublic);
+            Assert.AreEqual(false, subject.IsArchived);
         }
 
         [Test]
@@ -134,6 +136,66 @@
             Assert.AreEqual(updateCommand.Name, @event.Name);
             Assert.AreEqual(updateCommand.Description, @event.Description);
             Assert.AreEqual(updateCommand.Location, @event.Location);
+            Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
+        }
+
+        [Test]
+        public void HandlingArchiveListingCommandRequiresCreateEvent()
+        {
+            var subject = this.GetSubject();
+            var command = new CommandBuilder<ArchiveListingCommand>().Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(command));
+        }
+
+        [Test]
+        public void HandlingArchiveListingCommandChecksUserId()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var archiveCommand = new CommandBuilder<ArchiveListingCommand>().With(x => x.UserId, Guid.NewGuid()).Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(archiveCommand));
+        }
+
+        [Test]
+        public void HandlingArchiveListingCommandUpdatesState()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var archiveCommand = new CommandBuilder<ArchiveListingCommand>()
+                .With(x => x.UserId, createCommand.UserId)
+                .Build();
+
+            subject.Handle(archiveCommand);
+
+            Assert.AreEqual(true, subject.IsArchived);
+        }
+
+        [Test]
+        public void HandlingArchiveListingCommandRaisesEvent()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var archiveCommand = new CommandBuilder<ArchiveListingCommand>()
+                .With(x => x.UserId, createCommand.UserId)
+                .Build();
+
+            subject.Handle(archiveCommand);
+
+            var uncommittedEvents = subject.GetUncommittedEvents();
+            Assert.AreEqual(2, subject.Events.Count);
+            Assert.AreEqual(2, uncommittedEvents.Count);
+            var @event = uncommittedEvents.Last() as ListingArchived;
+            Assert.NotNull(@event);
+            Assert.AreEqual(archiveCommand.EntityKey, @event.EntityKey);
+            Assert.AreEqual(archiveCommand.UserId, @event.UserId);
             Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
 

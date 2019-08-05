@@ -21,6 +21,10 @@ namespace Karmr.Domain.Entities
 
         internal GeoLocation? Location { get; private set; }
 
+        internal bool IsPublic { get; private set; }
+
+        internal bool IsArchived { get; private set; }
+
         internal Listing(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
         private void Handle(CreateListingCommand command)
@@ -45,6 +49,19 @@ namespace Karmr.Domain.Entities
             this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Name, command.Description, command.Location, this.Clock.UtcNow));
         }
 
+        private void Handle(ArchiveListingCommand command)
+        {
+            if (!this.Events.Any(x => x is ListingCreated))
+            {
+                throw new Exception(string.Format("ListingCreated event missing (found {0} events)", this.Events.Count));
+            }
+            if (this.UserId != command.UserId)
+            {
+                throw new Exception("Permission denied");
+            }
+            this.Raise(new ListingArchived(command.EntityKey, command.UserId, this.Clock.UtcNow));
+        }
+
         private void Apply(ListingCreated @event)
         {
             this.Id = @event.EntityKey;
@@ -52,6 +69,8 @@ namespace Karmr.Domain.Entities
             this.Name = @event.Name;
             this.Description = @event.Description;
             this.Location = @event.Location;
+            this.IsPublic = true;
+            this.IsArchived = false;
         }
 
         private void Apply(ListingUpdated @event)
@@ -59,6 +78,11 @@ namespace Karmr.Domain.Entities
             this.Name = @event.Name;
             this.Description = @event.Description;
             this.Location = @event.Location;
+        }
+
+        private void Apply(ListingArchived @event)
+        {
+            this.IsArchived = true;
         }
     }
 }
