@@ -33,6 +33,14 @@ namespace Karmr.DomainUnitTests.Builders
                 { "EntityKey", Guid.NewGuid() },
                 { "UserId", Guid.NewGuid() }
             });
+
+            // listing discussion
+            CommandConstructorArguments.Add(typeof(CreateListingDiscussionThreadCommand), new Dictionary<string, object>
+            {
+                { "EntityKey", Guid.NewGuid() },
+                { "UserId", Guid.NewGuid() },
+                { "Content", "Content" }
+            });
         }
 
         internal static Dictionary<string, object> GetConstructorArguments(Type type)
