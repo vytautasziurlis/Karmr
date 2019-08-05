@@ -70,5 +70,25 @@ namespace Karmr.DomainUnitTests.Denormalizers
                     It.Is<object>(@params => Asserts.HaveSameProperties(expectedParams, @params))),
                 Times.Once);
         }
+
+        [Test]
+        public void ApplyingListingArchivedEventCallsRepository()
+        {
+            var @event = new ListingArchived(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+
+            var expectedParams = new
+            {
+                @event.EntityKey,
+                @event.Timestamp
+            };
+
+            this.subject.Apply(@event);
+
+            this.repository.Verify(
+                x => x.Execute(
+                    "UPDATE ReadModel.Listing SET [IsArchived] = 1, [Modified] = @Timestamp WHERE Id = @EntityKey",
+                    It.Is<object>(@params => Asserts.HaveSameProperties(expectedParams, @params))),
+                Times.Once);
+        }
     }
 }

@@ -39,5 +39,16 @@ namespace Karmr.Domain.Denormalizers
             };
             this.Repository.Execute(sql, @params);
         }
+
+        private void Apply(ListingArchived @event)
+        {
+            const string sql = @"UPDATE ReadModel.Listing SET [IsArchived] = 1, [Modified] = @Timestamp WHERE Id = @EntityKey";
+            var @params = new
+            {
+                @event.EntityKey,
+                @event.Timestamp
+            };
+            this.Repository.Execute(sql, @params);
+        }
     }
 }
