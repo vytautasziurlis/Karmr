@@ -31,6 +31,7 @@
             Assert.AreEqual(command.Location, subject.Location);
             Assert.AreEqual(true, subject.IsPublic);
             Assert.AreEqual(false, subject.IsArchived);
+            Assert.IsEmpty(subject.DiscussionThreads);
         }
 
         [Test]
@@ -197,6 +198,86 @@
             Assert.AreEqual(archiveCommand.EntityKey, @event.EntityKey);
             Assert.AreEqual(archiveCommand.UserId, @event.UserId);
             Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionThreadCommandRequiresCreateEvent()
+        {
+            var subject = this.GetSubject();
+            var command = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(command));
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionThreadCommandChecksUserId()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>()
+                .With(x => x.UserId, createCommand.UserId)
+                .Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(createThreadCommand));
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionThreadCommandTwiceThrows()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+            subject.Handle(createThreadCommand);
+
+            Assert.Throws<Exception>(() => subject.Handle(createThreadCommand));
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionThreadCommandUpdatesState()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+
+            subject.Handle(createThreadCommand);
+
+            Assert.AreEqual(createThreadCommand.UserId, subject.DiscussionThreads.First().UserId);
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionThreadCommandRaisesEvent()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+
+            subject.Handle(createThreadCommand);
+
+            var uncommittedEvents = subject.GetUncommittedEvents();
+            Assert.AreEqual(3, subject.Events.Count);
+            Assert.AreEqual(3, uncommittedEvents.Count);
+
+            var event1 = uncommittedEvents[1] as ListingDiscussionThreadCreated;
+            Assert.NotNull(event1);
+            Assert.AreEqual(createThreadCommand.EntityKey, event1.EntityKey);
+            Assert.AreEqual(createThreadCommand.UserId, event1.UserId);
+            Assert.AreEqual(this.clock.UtcNow, event1.Timestamp);
+
+            var event2 = uncommittedEvents.Last() as ListingDiscussionPostCreated;
+            Assert.NotNull(event2);
+            Assert.AreEqual(createThreadCommand.EntityKey, event2.EntityKey);
+            Assert.AreEqual(createThreadCommand.UserId, event2.UserId);
+            Assert.AreEqual(event1.ThreadId, event2.ThreadId);
+            Assert.AreEqual(createThreadCommand.Content, event2.Content);
+            Assert.AreEqual(this.clock.UtcNow, event2.Timestamp);
         }
 
         private Listing GetSubject()

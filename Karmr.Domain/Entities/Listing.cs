@@ -25,6 +25,8 @@ namespace Karmr.Domain.Entities
 
         internal bool IsArchived { get; private set; }
 
+        internal List<DiscussionThread> DiscussionThreads { get; private set; }
+
         internal Listing(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
         private void Handle(CreateListingCommand command)
@@ -62,6 +64,27 @@ namespace Karmr.Domain.Entities
             this.Raise(new ListingArchived(command.EntityKey, command.UserId, this.Clock.UtcNow));
         }
 
+        private void Handle(CreateListingDiscussionThreadCommand command)
+        {
+            if (!this.Events.Any(x => x is ListingCreated))
+            {
+                throw new Exception(string.Format("ListingCreated event missing (found {0} events)", this.Events.Count));
+            }
+            if (this.UserId == command.UserId)
+            {
+                throw new Exception("Permission denied");
+            }
+            if (this.DiscussionThreads.Any(x => x.UserId == command.UserId))
+            {
+                throw new Exception("Permission denied");
+            }
+
+            var threadId = Guid.NewGuid();
+            var postId = Guid.NewGuid();
+            this.Raise(new ListingDiscussionThreadCreated(command.EntityKey, command.UserId, threadId, this.Clock.UtcNow));
+            this.Raise(new ListingDiscussionPostCreated(command.EntityKey, command.UserId, postId, threadId, command.Content, this.Clock.UtcNow));
+        }
+
         private void Apply(ListingCreated @event)
         {
             this.Id = @event.EntityKey;
@@ -71,6 +94,7 @@ namespace Karmr.Domain.Entities
             this.Location = @event.Location;
             this.IsPublic = true;
             this.IsArchived = false;
+            this.DiscussionThreads = new List<DiscussionThread>();
         }
 
         private void Apply(ListingUpdated @event)
@@ -83,6 +107,17 @@ namespace Karmr.Domain.Entities
         private void Apply(ListingArchived @event)
         {
             this.IsArchived = true;
+        }
+
+        private void Apply(ListingDiscussionThreadCreated @event)
+        {
+            this.DiscussionThreads.Add(new DiscussionThread(@event.ThreadId, @event.UserId));
+        }
+
+        private void Apply(ListingDiscussionPostCreated @event)
+        {
+            var newPost = new DiscussionPost(@event.UserId, @event.Content);
+            this.DiscussionThreads.Single(x => x.ThreadId == @event.ThreadId).Posts.Add(newPost);
         }
     }
 }
