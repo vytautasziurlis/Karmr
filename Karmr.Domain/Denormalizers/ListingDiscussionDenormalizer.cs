@@ -11,7 +11,7 @@ namespace Karmr.Domain.Denormalizers
 
         private void Apply(ListingDiscussionPostCreated @event)
         {
-            const string sql = @"INSERT INTO ReadModel.ListingDiscussion ([Id], [ListingId], [UserId], [ThreadId], [Content], [Created]) VALUES (@Id, @UserId, @ListingId, @ThreadId, @Content, @Created)";
+            const string sql = @"INSERT INTO ReadModel.ListingDiscussion ([Id], [ListingId], [UserId], [ThreadId], [Content], [Created]) VALUES (@Id, @ListingId, @UserId, @ThreadId, @Content, @Created)";
             var @params = new
             {
                 @event.PostId,

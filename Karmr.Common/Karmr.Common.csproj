@@ -58,6 +58,7 @@
     <Compile Include="Infrastructure\UnhandledEventException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\DiscussionPost.cs" />
+    <Compile Include="Types\Offer.cs" />
     <Compile Include="Types\DiscussionThread.cs" />
     <Compile Include="Types\GeoLocation.cs" />
   </ItemGroup>

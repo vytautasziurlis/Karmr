@@ -32,6 +32,7 @@
             Assert.AreEqual(true, subject.IsPublic);
             Assert.AreEqual(false, subject.IsArchived);
             Assert.IsEmpty(subject.DiscussionThreads);
+            Assert.IsEmpty(subject.Offers);
         }
 
         [Test]
@@ -278,6 +279,80 @@
             Assert.AreEqual(event1.ThreadId, event2.ThreadId);
             Assert.AreEqual(createThreadCommand.Content, event2.Content);
             Assert.AreEqual(this.clock.UtcNow, event2.Timestamp);
+        }
+
+        [Test]
+        public void HandlingCreateListingOfferCommandRequiresCreateEvent()
+        {
+            var subject = this.GetSubject();
+            var command = new CommandBuilder<CreateListingOfferCommand>().Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(command));
+        }
+
+        [Test]
+        public void HandlingCreateListingOfferCommandChecksUserId()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createOfferCommand = new CommandBuilder<CreateListingOfferCommand>()
+                .With(x => x.UserId, createCommand.UserId)
+                .Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(createOfferCommand));
+        }
+
+        [Test]
+        public void HandlingCreateListingOfferCommandTwiceThrows()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createOfferCommand = new CommandBuilder<CreateListingOfferCommand>().Build();
+            subject.Handle(createOfferCommand);
+
+            Assert.Throws<Exception>(() => subject.Handle(createOfferCommand));
+        }
+
+        [Test]
+        public void HandlingCreateListingOfferCommandUpdatesState()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createOfferCommand = new CommandBuilder<CreateListingOfferCommand>().Build();
+
+            subject.Handle(createOfferCommand);
+
+            var offer = subject.Offers.First();
+            Assert.AreEqual(createOfferCommand.UserId, offer.UserId);
+            Assert.AreEqual(false, offer.Accepted);
+        }
+
+        [Test]
+        public void HandlingCreateListingOfferCommandRaisesEvent()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createOfferCommand = new CommandBuilder<CreateListingOfferCommand>().Build();
+
+            subject.Handle(createOfferCommand);
+
+            var uncommittedEvents = subject.GetUncommittedEvents();
+            Assert.AreEqual(2, subject.Events.Count);
+            Assert.AreEqual(2, uncommittedEvents.Count);
+
+            var @event = uncommittedEvents[1] as ListingOfferCreated;
+            Assert.NotNull(@event);
+            Assert.AreEqual(createOfferCommand.EntityKey, @event.EntityKey);
+            Assert.AreEqual(createOfferCommand.UserId, @event.UserId);
+            Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
 
         private Listing GetSubject()

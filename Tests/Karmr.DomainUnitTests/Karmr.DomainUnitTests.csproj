@@ -51,10 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateListingOfferCommandTests.cs" />
     <Compile Include="Commands\ArchiveListingCommandTests.cs" />
     <Compile Include="Commands\CreateListingDiscussionThreadCommandTests.cs" />
     <Compile Include="Denormalizers\DenormalizerHandlerTests.cs" />
     <Compile Include="Denormalizers\DenormalizerTests.cs" />
+    <Compile Include="Denormalizers\ListingOfferDenormalizerTests.cs" />
     <Compile Include="Denormalizers\ListingDiscussionDenormalizerTests.cs" />
     <Compile Include="Denormalizers\ListingDenormalizerTests.cs" />
     <Compile Include="Entities\ListingTests.cs" />

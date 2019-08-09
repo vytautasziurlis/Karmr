@@ -27,6 +27,8 @@ namespace Karmr.Domain.Entities
 
         internal List<DiscussionThread> DiscussionThreads { get; private set; }
 
+        internal List<Offer> Offers { get; private set; }
+
         internal Listing(IClock clock, IEnumerable<IEvent> events) : base(clock, events) { }
 
         private void Handle(CreateListingCommand command)
@@ -76,13 +78,31 @@ namespace Karmr.Domain.Entities
             }
             if (this.DiscussionThreads.Any(x => x.UserId == command.UserId))
             {
-                throw new Exception("Permission denied");
+                throw new Exception("Discussion thread already exists");
             }
 
             var threadId = Guid.NewGuid();
             var postId = Guid.NewGuid();
             this.Raise(new ListingDiscussionThreadCreated(command.EntityKey, command.UserId, threadId, this.Clock.UtcNow));
             this.Raise(new ListingDiscussionPostCreated(command.EntityKey, command.UserId, postId, threadId, command.Content, this.Clock.UtcNow));
+        }
+
+        private void Handle(CreateListingOfferCommand command)
+        {
+            if (!this.Events.Any(x => x is ListingCreated))
+            {
+                throw new Exception(string.Format("ListingCreated event missing (found {0} events)", this.Events.Count));
+            }
+            if (this.UserId == command.UserId)
+            {
+                throw new Exception("Permission denied");
+            }
+            if (this.Offers.Any(x => x.UserId == command.UserId))
+            {
+                throw new Exception("Offer already exists");
+            }
+
+            this.Raise(new ListingOfferCreated(command.EntityKey, command.UserId, this.Clock.UtcNow));
         }
 
         private void Apply(ListingCreated @event)
@@ -95,6 +115,7 @@ namespace Karmr.Domain.Entities
             this.IsPublic = true;
             this.IsArchived = false;
             this.DiscussionThreads = new List<DiscussionThread>();
+            this.Offers = new List<Offer>();
         }
 
         private void Apply(ListingUpdated @event)
@@ -118,6 +139,11 @@ namespace Karmr.Domain.Entities
         {
             var newPost = new DiscussionPost(@event.UserId, @event.Content);
             this.DiscussionThreads.Single(x => x.ThreadId == @event.ThreadId).Posts.Add(newPost);
+        }
+
+        private void Apply(ListingOfferCreated @event)
+        {
+            this.Offers.Add(new Offer(@event.UserId, false));
         }
     }
 }
