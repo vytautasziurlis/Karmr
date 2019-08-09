@@ -49,6 +49,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\CreateListingCommand.cs" />
     <Compile Include="Commands\CreateListingDiscussionThreadCommand.cs" />
+    <Compile Include="Commands\AcceptListingOfferCommand.cs" />
     <Compile Include="Commands\CreateListingOfferCommand.cs" />
     <Compile Include="Commands\UpdateListingCommand.cs" />
     <Compile Include="CommandValidators\CreateListingDiscussionThreadCommandValidator.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Entities\Listing.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\ListingDiscussionPostCreated.cs" />
+    <Compile Include="Events\ListingOfferAccepted.cs" />
     <Compile Include="Events\ListingOfferCreated.cs" />
     <Compile Include="Events\ListingDiscussionThreadCreated.cs" />
     <Compile Include="Events\ListingArchived.cs" />

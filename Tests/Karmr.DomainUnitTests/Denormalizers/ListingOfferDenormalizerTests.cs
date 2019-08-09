@@ -24,10 +24,11 @@ namespace Karmr.DomainUnitTests.Denormalizers
         [Test]
         public void ApplyingListingOfferCreatedEventCallsRepository()
         {
-            var @event = new ListingOfferCreated(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var @event = new ListingOfferCreated(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
 
             var expectedParams = new
             {
+                @event.OfferId,
                 @event.EntityKey,
                 @event.UserId,
                 @event.Timestamp
@@ -37,7 +38,27 @@ namespace Karmr.DomainUnitTests.Denormalizers
 
             this.repository.Verify(
                 x => x.Execute(
-                    "INSERT INTO ReadModel.ListingOffer ([ListingId], [UserId], [Accepted], [Created]) VALUES (@ListingId, @UserId, 0, @Created)",
+                    "INSERT INTO ReadModel.ListingOffer ([Id], [ListingId], [UserId], [Accepted], [Created]) VALUES (@OfferId, @ListingId, @UserId, 0, @Timestamp)",
+                    It.Is<object>(@params => Asserts.HaveSameProperties(expectedParams, @params))),
+                Times.Once);
+        }
+
+        [Test]
+        public void ApplyingListingOfferAcceptedEventCallsRepository()
+        {
+            var @event = new ListingOfferAccepted(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+
+            var expectedParams = new
+            {
+                @event.OfferId,
+                @event.Timestamp
+            };
+
+            this.subject.Apply(@event);
+
+            this.repository.Verify(
+                x => x.Execute(
+                    "UPDATE ReadModel.ListingOffer SET [Accepted] = 1, [Modified] = @Timestamp WHERE [Id] = @OfferId",
                     It.Is<object>(@params => Asserts.HaveSameProperties(expectedParams, @params))),
                 Times.Once);
         }
