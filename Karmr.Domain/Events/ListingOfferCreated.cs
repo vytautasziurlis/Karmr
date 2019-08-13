@@ -4,8 +4,11 @@ namespace Karmr.Domain.Events
 {
     internal class ListingOfferCreated : Event
     {
-        public ListingOfferCreated(Guid entityKey, Guid userId, DateTime timestamp) : base(entityKey, userId, timestamp)
+        internal Guid OfferId { get; }
+
+        public ListingOfferCreated(Guid entityKey, Guid userId, Guid offerId, DateTime timestamp) : base(entityKey, userId, timestamp)
         {
+            this.OfferId = offerId;
         }
     }
 }

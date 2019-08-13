@@ -102,7 +102,31 @@ namespace Karmr.Domain.Entities
                 throw new Exception("Offer already exists");
             }
 
-            this.Raise(new ListingOfferCreated(command.EntityKey, command.UserId, this.Clock.UtcNow));
+            var offerId = Guid.NewGuid();
+            this.Raise(new ListingOfferCreated(command.EntityKey, command.UserId, offerId, this.Clock.UtcNow));
+        }
+
+        private void Handle(AcceptListingOfferCommand command)
+        {
+            if (!this.Events.Any(x => x is ListingCreated))
+            {
+                throw new Exception(string.Format("ListingCreated event missing (found {0} events)", this.Events.Count));
+            }
+            if (this.UserId != command.UserId)
+            {
+                throw new Exception("Permission denied");
+            }
+
+            var offer = this.Offers.SingleOrDefault(x => x.OfferId == command.OfferId);
+            if (offer == null)
+            {
+                throw new Exception("Offer does not exist");
+            }
+
+            if (offer.Accepted == false)
+            {
+                this.Raise(new ListingOfferAccepted(command.EntityKey, command.UserId, command.OfferId, this.Clock.UtcNow));
+            }
         }
 
         private void Apply(ListingCreated @event)
@@ -143,7 +167,13 @@ namespace Karmr.Domain.Entities
 
         private void Apply(ListingOfferCreated @event)
         {
-            this.Offers.Add(new Offer(@event.UserId, false));
+            this.Offers.Add(new Offer(@event.OfferId, @event.UserId, false));
+        }
+
+        private void Apply(ListingOfferAccepted @event)
+        {
+            var index = this.Offers.FindIndex(x => x.OfferId == @event.OfferId);
+            this.Offers[index] = new Offer(@event.OfferId, @event.UserId, true);
         }
     }
 }

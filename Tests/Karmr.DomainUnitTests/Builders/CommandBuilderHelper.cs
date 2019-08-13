@@ -48,6 +48,13 @@ namespace Karmr.DomainUnitTests.Builders
                 { "EntityKey", Guid.NewGuid() },
                 { "UserId", Guid.NewGuid() }
             });
+
+            CommandConstructorArguments.Add(typeof(AcceptListingOfferCommand), new Dictionary<string, object>
+            {
+                { "EntityKey", Guid.NewGuid() },
+                { "UserId", Guid.NewGuid() },
+                { "OfferId", Guid.NewGuid() }
+            });
         }
 
         internal static Dictionary<string, object> GetConstructorArguments(Type type)
