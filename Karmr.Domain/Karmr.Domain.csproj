@@ -48,10 +48,12 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\CreateListingCommand.cs" />
+    <Compile Include="Commands\CreateListingDiscussionPostCommand.cs" />
     <Compile Include="Commands\CreateListingDiscussionThreadCommand.cs" />
     <Compile Include="Commands\AcceptListingOfferCommand.cs" />
     <Compile Include="Commands\CreateListingOfferCommand.cs" />
     <Compile Include="Commands\UpdateListingCommand.cs" />
+    <Compile Include="CommandValidators\CreateListingDiscussionPostCommandValidator.cs" />
     <Compile Include="CommandValidators\CreateListingDiscussionThreadCommandValidator.cs" />
     <Compile Include="CommandValidators\UpdateListingCommandValidator.cs" />
     <Compile Include="CommandValidators\CreateListingCommandValidator.cs" />

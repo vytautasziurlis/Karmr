@@ -282,6 +282,91 @@
         }
 
         [Test]
+        public void HandlingCreateListingDiscussionPostCommandRequiresCreateEvent()
+        {
+            var subject = this.GetSubject();
+            var command = new CommandBuilder<CreateListingDiscussionPostCommand>().Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(command));
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionPostCommandChecksUserId()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+            subject.Handle(createThreadCommand);
+
+            var uncommittedEvents = subject.GetUncommittedEvents();
+            var @event = uncommittedEvents[1] as ListingDiscussionThreadCreated;
+
+            var createPostCommand = new CommandBuilder<CreateListingDiscussionPostCommand>()
+                .With(x => x.ThreadId, @event.ThreadId)
+                .With(x => x.UserId, Guid.NewGuid())
+                .Build();
+
+            Assert.Throws<Exception>(() => subject.Handle(createPostCommand));
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionPostCommandUpdatesState()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+            subject.Handle(createThreadCommand);
+
+            var uncommittedEvents = subject.GetUncommittedEvents();
+            var @event = uncommittedEvents[1] as ListingDiscussionThreadCreated;
+
+            var createPostCommand = new CommandBuilder<CreateListingDiscussionPostCommand>()
+                .With(x => x.UserId, @event.UserId)
+                .With(x => x.ThreadId, @event.ThreadId)
+                .Build();
+
+            subject.Handle(createPostCommand);
+
+            Assert.AreEqual(2, subject.DiscussionThreads.First().Posts.Count);
+            Assert.AreEqual(createPostCommand.UserId, subject.DiscussionThreads.First().Posts.Last().UserId);
+            Assert.AreEqual(createPostCommand.Content, subject.DiscussionThreads.First().Posts.Last().Content);
+        }
+
+        [Test]
+        public void HandlingCreateListingDiscussionPostCommandRaisesEvent()
+        {
+            var subject = this.GetSubject();
+            var createCommand = new CommandBuilder<CreateListingCommand>().Build();
+            subject.Handle(createCommand);
+
+            var createThreadCommand = new CommandBuilder<CreateListingDiscussionThreadCommand>().Build();
+            subject.Handle(createThreadCommand);
+
+            var uncommittedEvents = subject.GetUncommittedEvents();
+            var createEvent = uncommittedEvents[1] as ListingDiscussionThreadCreated;
+
+            var createPostCommand = new CommandBuilder<CreateListingDiscussionPostCommand>()
+                .With(x => x.UserId, createEvent.UserId)
+                .With(x => x.ThreadId, createEvent.ThreadId)
+                .Build();
+
+            subject.Handle(createPostCommand);
+
+            uncommittedEvents = subject.GetUncommittedEvents();
+            var @event = uncommittedEvents.Last() as ListingDiscussionPostCreated;
+            Assert.NotNull(@event);
+            Assert.AreEqual(createPostCommand.EntityKey, @event.EntityKey);
+            Assert.AreEqual(createPostCommand.UserId, @event.UserId);
+            Assert.AreEqual(@event.ThreadId, @event.ThreadId);
+            Assert.AreEqual(createPostCommand.Content, @event.Content);
+            Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
+        }
+
+        [Test]
         public void HandlingCreateListingOfferCommandRequiresCreateEvent()
         {
             var subject = this.GetSubject();

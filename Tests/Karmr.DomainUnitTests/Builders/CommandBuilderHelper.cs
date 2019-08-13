@@ -39,7 +39,15 @@ namespace Karmr.DomainUnitTests.Builders
             {
                 { "EntityKey", Guid.NewGuid() },
                 { "UserId", Guid.NewGuid() },
-                { "Content", "Content" }
+                { "Content", "Thread content" }
+            });
+
+            CommandConstructorArguments.Add(typeof(CreateListingDiscussionPostCommand), new Dictionary<string, object>
+            {
+                { "EntityKey", Guid.NewGuid() },
+                { "UserId", Guid.NewGuid() },
+                { "ThreadId", Guid.NewGuid() },
+                { "Content", "Post content" }
             });
 
             // listing offers
