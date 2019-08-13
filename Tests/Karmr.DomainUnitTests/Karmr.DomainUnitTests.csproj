@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AcceptListingOfferTests.cs" />
+    <Compile Include="Commands\CreateListingDiscussionPostCommandTests.cs" />
     <Compile Include="Commands\CreateListingOfferCommandTests.cs" />
     <Compile Include="Commands\ArchiveListingCommandTests.cs" />
     <Compile Include="Commands\CreateListingDiscussionThreadCommandTests.cs" />

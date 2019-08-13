@@ -87,6 +87,26 @@ namespace Karmr.Domain.Entities
             this.Raise(new ListingDiscussionPostCreated(command.EntityKey, command.UserId, postId, threadId, command.Content, this.Clock.UtcNow));
         }
 
+        private void Handle(CreateListingDiscussionPostCommand command)
+        {
+            if (!this.Events.Any(x => x is ListingCreated))
+            {
+                throw new Exception(string.Format("ListingCreated event missing (found {0} events)", this.Events.Count));
+            }
+            var thread = this.DiscussionThreads.SingleOrDefault(x => x.ThreadId == command.ThreadId);
+            if (thread == null)
+            {
+                throw new Exception("Discussion thread does not exist");
+            }
+            if (this.UserId != command.UserId && thread.UserId != command.UserId)
+            {
+                throw new Exception("Permission denied");
+            }
+
+            var postId = Guid.NewGuid();
+            this.Raise(new ListingDiscussionPostCreated(command.EntityKey, command.UserId, postId, thread.ThreadId, command.Content, this.Clock.UtcNow));
+        }
+
         private void Handle(CreateListingOfferCommand command)
         {
             if (!this.Events.Any(x => x is ListingCreated))
