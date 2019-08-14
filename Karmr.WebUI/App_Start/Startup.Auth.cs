@@ -60,8 +60,8 @@ namespace Karmr.WebUI
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "950998646138-tnm0ormvishv344vgljmopj68l048jse.apps.googleusercontent.com",
-                ClientSecret = "kV1jaOutHC1gcztuGKg0DibD"
+                ClientId = "",
+                ClientSecret = ""
             });
         }
     }
