@@ -54,6 +54,7 @@
     <Compile Include="Commands\ArchiveListingCommand.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
+    <Compile Include="Commands\CommandHandlerFactory.cs" />
     <Compile Include="Commands\CreateListingCommand.cs" />
     <Compile Include="Commands\CreateListingDiscussionPostCommand.cs" />
     <Compile Include="Commands\CreateListingDiscussionThreadCommand.cs" />
