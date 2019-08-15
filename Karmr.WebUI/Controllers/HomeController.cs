@@ -1,12 +1,20 @@
 ﻿using System.Web.Mvc;
-
+using Karmr.Common.Contracts;
 using Karmr.Domain.Queries;
-using Karmr.Persistence;
 
 namespace Karmr.WebUI.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ICommandHandler commandHandler;
+        private readonly ListingQueries listingQueries;
+
+        public HomeController(ICommandHandler commandHandler, ListingQueries listingQueries)
+        {
+            this.commandHandler = commandHandler;
+            this.listingQueries = listingQueries;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -28,8 +36,7 @@ namespace Karmr.WebUI.Controllers
 
         public ActionResult TestPage()
         {
-            var query = new ListingQueries(new QueryRepository("Server=.;Database=Karmr;User Id=Karmr;Password=Karmr;"));
-            var listings = query.GetAll();
+            var listings = this.listingQueries.GetAll();
             return View();
         }
     }

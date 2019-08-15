@@ -10,7 +10,7 @@ using Karmr.Common.Infrastructure;
 
 namespace Karmr.Domain.Commands
 {
-    public sealed class CommandHandler
+    public sealed class CommandHandler : ICommandHandler
     {
         private readonly BindingFlags BindingFlags = BindingFlags.NonPublic
             | BindingFlags.Instance

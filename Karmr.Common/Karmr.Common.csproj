@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Contracts\IClock.cs" />
     <Compile Include="Contracts\ICommand.cs" />
+    <Compile Include="Contracts\ICommandHandler.cs" />
     <Compile Include="Contracts\IDenormalizerHandler.cs" />
     <Compile Include="Contracts\IDenormalizerRepository.cs" />
     <Compile Include="Contracts\IEvent.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Contracts\IQueryRepository.cs" />
     <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Infrastructure\CommandValidationException.cs" />
+    <Compile Include="Infrastructure\SystemClock.cs" />
     <Compile Include="Infrastructure\UnhandledCommandException.cs" />
     <Compile Include="Infrastructure\UnhandledEventException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
