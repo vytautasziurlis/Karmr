@@ -1,0 +1,72 @@
+﻿@model Karmr.WebUI.Models.Listing.ListingSearchViewModel
+@{
+    ViewBag.Title = "Index";
+    ViewBag.BodyClass = "about-page";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Volunteering Opportunities</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="contact-page-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="entry-content">
+                    <h2>Volunteering opportunities near you</h2>
+                    <p>To find volunteering opportunities near you please enter your location below and click "Search"</p>
+                    <div class="search-widget">
+                        <form class="flex flex-wrap align-items-center" action="@Url.Action("Search", "Listing")">
+                            <input type="search" id="location" placeholder="Enter your location..." value="@Model.Address">
+                            <input type="hidden" id="latitude" name="latitude" value="@Model.Latitude" />
+                            <input type="hidden" id="longitude" name="longitude" value="@Model.Longitude" />
+                            <input type="hidden" id="address" name="address" value="@Model.Address" />
+                            <button type="submit" class="flex justify-content-center align-items-center">Search</button>
+                        </form>
+                    </div>
+                </div>
+                <div id="map" style="width: 800px; height: 600px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initPage() {
+        initAutocomplete();
+        initMap();
+    }
+
+    function initAutocomplete() {
+        var input = document.getElementById('location');
+        var searchBox = new google.maps.places.SearchBox(input);
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) { return; }
+            document.getElementById('latitude').value = places[0].geometry.location.lat();
+            document.getElementById('longitude').value = places[0].geometry.location.lng();
+            document.getElementById('address').value = places[0].formatted_address;
+        });
+    }
+
+    function initMap() {
+        var myLatLng = {lat: @Model.Latitude, lng: @Model.Longitude};
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: myLatLng
+        });
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Your location'
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2GEGQ3pA7GT22ld9fnGdElOQihIv6wTs&libraries=places&callback=initPage" async defer></script>
