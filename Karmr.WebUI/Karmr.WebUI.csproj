@@ -192,6 +192,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Listing\ListingSearchFormModel.cs" />
     <Compile Include="Models\Listing\ListingSearchViewModel.cs" />
+    <Compile Include="Models\Listing\ListingViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

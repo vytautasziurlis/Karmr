@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div class="contact-page-wrap">
+<div class="contact-page-wrap" style="padding: 0 0 40px;">
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-8">
@@ -32,8 +32,63 @@
                         </form>
                     </div>
                 </div>
-                <div id="map" style="width: 800px; height: 600px;"></div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="home-page-events" style="padding: 0 0 96px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="entry-content">
+                    <h2>Results</h2>
+                    <div class="event-wrap d-flex flex-wrap justify-content-between">
+                        <figure class="m-0">
+                            <img src="/Content/images/event-1.jpg" alt="">
+                        </figure>
+                        <div class="event-content-wrap">
+                            <header class="entry-header d-flex flex-wrap align-items-center">
+                                <h3 class="entry-title w-100 m-0"><a href="#">Fundraiser for Kids</a></h3>
+                                <div class="posted-date">
+                                    <a href="#">Aug 25, 2018 </a>
+                                </div>
+                                <div class="cats-links">
+                                    <a href="#">Ball Room New York</a>
+                                </div>
+                            </header>
+                            <div class="entry-content">
+                                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tempus vestib ulum mauris.</p>
+                            </div>
+                            <div class="entry-footer">
+                                <a href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="event-wrap d-flex flex-wrap justify-content-between">
+                        <figure class="m-0">
+                            <img src="/Content/images/event-1.jpg" alt="">
+                        </figure>
+                        <div class="event-content-wrap">
+                            <header class="entry-header d-flex flex-wrap align-items-center">
+                                <h3 class="entry-title w-100 m-0"><a href="#">Fundraiser for Kids</a></h3>
+                                <div class="posted-date">
+                                    <a href="#">Aug 25, 2018 </a>
+                                </div>
+                                <div class="cats-links">
+                                    <a href="#">Ball Room New York</a>
+                                </div>
+                            </header>
+                            <div class="entry-content">
+                                <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris tempus vestib ulum mauris.</p>
+                            </div>
+                            <div class="entry-footer">
+                                <a href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -41,7 +96,6 @@
 <script>
     function initPage() {
         initAutocomplete();
-        initMap();
     }
 
     function initAutocomplete() {
@@ -53,19 +107,6 @@
             document.getElementById('latitude').value = places[0].geometry.location.lat();
             document.getElementById('longitude').value = places[0].geometry.location.lng();
             document.getElementById('address').value = places[0].formatted_address;
-        });
-    }
-
-    function initMap() {
-        var myLatLng = {lat: @Model.Latitude, lng: @Model.Longitude};
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
-            center: myLatLng
-        });
-        var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'Your location'
         });
     }
 </script>
