@@ -181,6 +181,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ListingController.cs" />
     <Compile Include="Controllers\ThemeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -189,6 +190,8 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Listing\ListingSearchFormModel.cs" />
+    <Compile Include="Models\Listing\ListingSearchViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -297,6 +300,7 @@
     <Content Include="fonts\themify.eot" />
     <Content Include="fonts\themify.ttf" />
     <Content Include="fonts\themify.woff" />
+    <None Include="Properties\PublishProfiles\karmr - Web Deploy.pubxml" />
     <None Include="Scripts\old\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\old\jquery-3.3.1.js" />
     <Content Include="Scripts\old\jquery-3.3.1.min.js" />
@@ -354,6 +358,8 @@
     <Content Include="Views\Theme\Portfolio.cshtml" />
     <Content Include="Views\Theme\SingleCauses.cshtml" />
     <Content Include="Views\Theme\Elements.cshtml" />
+    <Content Include="Views\Listing\Index.cshtml" />
+    <Content Include="Views\Listing\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
