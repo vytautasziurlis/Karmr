@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Karmr.WebUI.Models;
 
@@ -33,25 +27,20 @@ namespace Karmr.WebUI
     }
 
     // Configure the application user manager used in this application. UserManager is defined in ASP.NET Identity and is used by the application.
-    public class ApplicationUserManager : UserManager<ApplicationUser>
+    public sealed class ApplicationUserManager : UserManager<ApplicationUser>
     {
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
-        }
-
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
-        {
-            var manager = new ApplicationUserManager(new UserStore<ApplicationUser>(context.Get<ApplicationDbContext>()));
             // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+            UserValidator = new UserValidator<ApplicationUser>(this)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
 
             // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator
+            PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = true,
@@ -61,30 +50,28 @@ namespace Karmr.WebUI
             };
 
             // Configure user lockout defaults
-            manager.UserLockoutEnabledByDefault = true;
-            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+            UserLockoutEnabledByDefault = true;
+            DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            MaxFailedAccessAttemptsBeforeLockout = 5;
 
             // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
             // You can write your own provider and plug it in here.
-            manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
+            this.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
             {
                 MessageFormat = "Your security code is {0}"
             });
-            manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
+            this.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
             {
                 Subject = "Security Code",
                 BodyFormat = "Your security code is {0}"
             });
-            manager.EmailService = new EmailService();
-            manager.SmsService = new SmsService();
-            var dataProtectionProvider = options.DataProtectionProvider;
+            EmailService = new EmailService();
+            SmsService = new SmsService();
+            var dataProtectionProvider = Startup.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = 
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+                UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
-            return manager;
         }
     }
 
@@ -99,11 +86,6 @@ namespace Karmr.WebUI
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
             return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
-        }
-
-        public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
-        {
-            return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
 }
