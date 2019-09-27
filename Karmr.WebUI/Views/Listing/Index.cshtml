@@ -1,4 +1,5 @@
-﻿@model Karmr.WebUI.Models.Listing.ListingSearchFormModel
+﻿@using System.Configuration
+@model Karmr.WebUI.Models.Listing.ListingSearchFormModel
 @{
     ViewBag.Title = "Index";
     ViewBag.BodyClass = "about-page";
@@ -50,4 +51,4 @@
         });
     }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB2GEGQ3pA7GT22ld9fnGdElOQihIv6wTs&libraries=places&callback=initAutocomplete" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleAPIKey"]&libraries=places&callback=initAutocomplete" async defer></script>
