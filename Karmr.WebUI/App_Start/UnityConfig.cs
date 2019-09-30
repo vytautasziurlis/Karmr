@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using System;
+using System.Configuration;
 using System.Web;
 using Unity;
 using Unity.Injection;
@@ -48,7 +49,7 @@ namespace Karmr.WebUI
             container.RegisterType<ApplicationSignInManager>();
 
             // repositories
-            var connectionString = "Server=.;Database=Karmr;User Id=Karmr;Password=Karmr;";
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             container.RegisterType<IEventRepository, SqlEventRepository>(new InjectionConstructor(new object[] { connectionString }));
             container.RegisterType<IDenormalizerRepository, DenormalizerRepository>(new InjectionConstructor(new object[] { connectionString }));
             container.RegisterType<IQueryRepository, QueryRepository>(new InjectionConstructor(new object[] { connectionString }));

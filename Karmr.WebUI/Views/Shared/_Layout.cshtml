@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Hello World</title>
+    <title>Karmr</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     @Styles.Render("~/Content/css")
@@ -21,7 +22,15 @@
                     </div>
                     <div class="col-12 col-lg-4 d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center">
                         <div class="donate-btn">
-                            <a href="#">Donate Now</a>
+                            @if (Request.IsAuthenticated)
+                            {
+                                @*<a href="@Url.Action("Index", "Manage")">@User.Identity.GetUserName()</a>*@
+                                @User.Identity.GetUserName()
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("SignIn", "Account")">Sign In / Register</a>
+                            }
                         </div>
                     </div>
                 </div>
@@ -111,5 +120,6 @@
         </div>
     </footer>
     @Scripts.Render("~/bundles/js")
+    @RenderSection("scripts", required: false)
 </body>
 </html>
