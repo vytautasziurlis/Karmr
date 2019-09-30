@@ -1408,6 +1408,13 @@ ul.tabs-nav .tab-nav.active {
 }
 
 /*
+# General Form
+--------------------------------*/
+form label {
+    color: #929191;
+}
+
+/*
 # Donation Form
 --------------------------------*/
 .donation-form-wrap {
@@ -1896,7 +1903,7 @@ ul.tabs-nav .tab-nav.active {
 
 .contact-page-wrap .entry-content p {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 16px;
     color: #929191;
 }
 
@@ -1944,6 +1951,7 @@ ul.tabs-nav .tab-nav.active {
 
 .contact-form input[type="text"],
 .contact-form input[type="email"],
+.contact-form input[type="password"],
 .contact-form textarea {
     width: 100%;
     padding: 12px 24px;
@@ -1955,12 +1963,14 @@ ul.tabs-nav .tab-nav.active {
 
 .contact-form input[type="text"]:focus,
 .contact-form input[type="email"]:focus,
+.contact-form input[type="password"]:focus,
 .contact-form textarea:focus {
     outline: none;
 }
 
 .contact-form input[type="text"]::placeholder,
 .contact-form input[type="email"]::placeholder,
+.contact-form input[type="password"]::placeholder,
 .contact-form textarea::placeholder {
     color: #929191;
 }

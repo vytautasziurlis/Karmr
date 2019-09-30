@@ -26,7 +26,7 @@ namespace Karmr.WebUI.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult SignIn(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
@@ -37,7 +37,7 @@ namespace Karmr.WebUI.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> SignIn(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {

@@ -39,6 +39,9 @@ namespace Karmr.WebUI
                 "~/Scripts/jquery.barfiller.js",
                 "~/Scripts/custom.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+                "~/Scripts/jquery.validate*"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.min.css",
                 "~/Content/font-awesome.min.css",
