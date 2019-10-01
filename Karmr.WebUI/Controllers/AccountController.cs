@@ -357,10 +357,10 @@ namespace Karmr.WebUI.Controllers
         }
 
         //
-        // POST: /Account/LogOff
+        // POST: /Account/SignOut
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        public ActionResult SignOut()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
