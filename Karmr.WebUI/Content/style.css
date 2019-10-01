@@ -853,7 +853,7 @@ ul.tabs-nav .tab-nav.active {
 }
 
 .event-content-wrap {
-    width: calc(100% - 180px);
+    width: calc(100% - 10px);
     margin-top: -10px;
 }
 
@@ -863,7 +863,7 @@ ul.tabs-nav .tab-nav.active {
     color: #262626;
 }
 
-.event-content-wrap .posted-date a,
+.event-content-wrap .posted-date,
 .event-content-wrap .cats-links a {
     display: block;
     position: relative;
@@ -874,12 +874,12 @@ ul.tabs-nav .tab-nav.active {
     color: #262626;
 }
 
-.event-content-wrap .posted-date a {
+.event-content-wrap .posted-date {
     padding-right: 14px;
     margin-right: 14px;
 }
 
-.event-content-wrap .posted-date a::after {
+.event-content-wrap .posted-date::after {
     content: '';
     position: absolute;
     top: 0;

@@ -21,7 +21,7 @@
                         <div class="donate-btn">
                             @if (Request.IsAuthenticated)
                             {
-                                <a href="#">My Account</a>
+                                <a href="@Url.Action("Index", "Account")">My Account</a>
                                 using (Html.BeginForm("SignOut", "Account", FormMethod.Post, new { id = "signOutForm", style = "display: inline;" }))
                                 {
                                     @Html.AntiForgeryToken()

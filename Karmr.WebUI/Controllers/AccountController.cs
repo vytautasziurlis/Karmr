@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Karmr.Domain.Queries;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Karmr.WebUI.Models;
+using Karmr.WebUI.Models.Listing;
 
 namespace Karmr.WebUI.Controllers
 {
@@ -15,12 +17,26 @@ namespace Karmr.WebUI.Controllers
         private ApplicationUserManager userManager;
         private ApplicationSignInManager signInManager;
         private IAuthenticationManager authenticationManager;
+        private readonly ListingQueries listingQueries;
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IAuthenticationManager authenticationManager)
+        public AccountController(ApplicationUserManager userManager,
+            ApplicationSignInManager signInManager,
+            IAuthenticationManager authenticationManager,
+            ListingQueries listingQueries)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.authenticationManager = authenticationManager;
+            this.listingQueries = listingQueries;
+        }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            var listings = this.listingQueries
+                .GetByUserId(Helpers.UserId(this.User))
+                .Select(x => new ListingViewModel(x));
+            return View(listings);
         }
 
         //
@@ -293,10 +309,10 @@ namespace Karmr.WebUI.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            var loginInfo = await authenticationManager.GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
-                return RedirectToAction("Login");
+                return RedirectToAction("SignIn");
             }
 
             // Sign in the user with this external login provider if the user already has a login
@@ -333,7 +349,7 @@ namespace Karmr.WebUI.Controllers
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                var info = await authenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
@@ -362,7 +378,7 @@ namespace Karmr.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignOut()
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            authenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }
 
@@ -397,14 +413,6 @@ namespace Karmr.WebUI.Controllers
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
 
         private void AddErrors(IdentityResult result)
         {

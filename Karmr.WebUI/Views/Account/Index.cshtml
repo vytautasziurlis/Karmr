@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<Karmr.WebUI.Models.Listing.ListingViewModel>
+@{
+    ViewBag.Title = "Index";
+    ViewBag.BodyClass = "contact-page";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>My Account</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="news-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <h2>Active Listings</h2>
+                @foreach (var listing in Model)
+                {
+                    <div class="event-wrap d-flex flex-wrap justify-content-between">
+                        <div class="event-content-wrap">
+                            <header class="entry-header d-flex flex-wrap align-items-center">
+                                <h3 class="entry-title w-100 m-0"><a href="#">@listing.Name</a></h3>
+                                <div class="posted-date">@listing.Created.ToString("MMM d, yyyy")</div>
+                                <div class="cats-links">
+                                    <a href="#">Ball Room New York</a>
+                                </div>
+                            </header>
+                            <div class="entry-content">
+                                <p class="m-0">@listing.Description</p>
+                            </div>
+                            <div class="entry-footer">
+                                <a href="#">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                }
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="sidebar contact-form" style="margin: 0; padding-bottom: 35px;">
+                    <h2>Account Details</h2>
+                    <div style="word-wrap: break-word;">@User.Identity.GetUserName()</div>
+                    <a href="#">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
