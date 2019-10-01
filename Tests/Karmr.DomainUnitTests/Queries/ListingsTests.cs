@@ -27,6 +27,17 @@ namespace Karmr.DomainUnitTests.Queries
 
             this.mockRepository.Verify(x => x.Query<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing"), Times.Once);
         }
+        [Test]
+        public void GetByUserIdCallsRepository()
+        {
+            var userId = Guid.NewGuid();
+            this.subject.GetByUserId(userId);
+
+            this.mockRepository.Verify(
+                x => x.Query<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [UserId] = @UserId",
+                    It.Is<object>(@params => Asserts.HaveSameProperties(new { userId }, @params))),
+                Times.Once);
+        }
 
         [Test]
         public void GetByIdCallsRepository()

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Karmr.WebUI.Models.Listing.ListingViewModel>
+@{
+    ViewBag.Title = "Help requests";
+    ViewBag.BodyClass = "about-page";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Manage Help Requests</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="home-page-events" style="padding: 0 0 96px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="entry-content">
+                    <h2 style="padding-top: 40px;">Active requests</h2>
+                    @foreach (var listing in Model)
+                    {
+                        <div class="event-wrap d-flex flex-wrap justify-content-between">
+                            <figure class="m-0">
+                                <img src="/Content/images/event-1.jpg" alt="">
+                            </figure>
+                            <div class="event-content-wrap">
+                                <header class="entry-header d-flex flex-wrap align-items-center">
+                                    <h3 class="entry-title w-100 m-0"><a href="#">@listing.Name</a></h3>
+                                    <div class="posted-date">
+                                        <a href="#">@listing.Created.ToString("MMM d, yyyy")</a>
+                                    </div>
+                                    <div class="cats-links">
+                                        <a href="#">Ball Room New York</a>
+                                    </div>
+                                </header>
+                                <div class="entry-content">
+                                    <p class="m-0">@listing.Description</p>
+                                </div>
+                                <div class="entry-footer">
+                                    <a href="#">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
