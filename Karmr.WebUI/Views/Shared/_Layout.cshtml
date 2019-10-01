@@ -12,20 +12,21 @@
         <div class="top-header-bar">
             <div class="container">
                 <div class="row flex-wrap justify-content-center justify-content-lg-between align-items-lg-center">
-                    <div class="col-12 col-lg-8 d-none d-md-flex flex-wrap justify-content-center justify-content-lg-start mb-3 mb-lg-0">
+                    <div class="col-12 col-lg-4 d-none d-md-flex flex-wrap justify-content-center justify-content-lg-start mb-3 mb-lg-0">
                         <div class="header-bar-email">
                             MAIL: <a href="#">contact@ourcharity.com</a>
                         </div>
-                        <div class="header-bar-text">
-                            <p>PHONE: <span>+24 3772 120 091 / +56452 4567</span></p>
-                        </div>
                     </div>
-                    <div class="col-12 col-lg-4 d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center">
+                    <div class="col-12 col-lg-8 d-flex flex-wrap justify-content-center justify-content-lg-end align-items-center">
                         <div class="donate-btn">
                             @if (Request.IsAuthenticated)
                             {
-                                @*<a href="@Url.Action("Index", "Manage")">@User.Identity.GetUserName()</a>*@
-                                @User.Identity.GetUserName()
+                                <a href="#">@User.Identity.GetUserName()</a>
+                                using (Html.BeginForm("SignOut", "Account", FormMethod.Post, new { id = "signOutForm", style = "display: inline;" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <a href="javascript:document.getElementById('signOutForm').submit()">Sign Out</a>
+                                }
                             }
                             else
                             {
