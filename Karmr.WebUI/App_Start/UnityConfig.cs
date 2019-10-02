@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 using System;
 using System.Configuration;
 using System.Web;
+using Karmr.WebUI.Services;
 using Unity;
 using Unity.Injection;
 
@@ -39,6 +40,8 @@ namespace Karmr.WebUI
         {
             // infrastructure
             container.RegisterType<IClock, SystemClock>();
+            var sendGridApiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
+            container.RegisterType<IEmailService, SendGridEmailService>(new InjectionConstructor(new object[] { sendGridApiKey }));
 
             // asp.net identity
             container.RegisterType<ApplicationDbContext>();

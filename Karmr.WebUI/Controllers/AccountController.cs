@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Karmr.WebUI.Models;
 using Karmr.WebUI.Models.Listing;
+using Karmr.WebUI.Services;
 
 namespace Karmr.WebUI.Controllers
 {
@@ -16,17 +17,21 @@ namespace Karmr.WebUI.Controllers
     {
         private ApplicationUserManager userManager;
         private ApplicationSignInManager signInManager;
-        private IAuthenticationManager authenticationManager;
+        private readonly IAuthenticationManager authenticationManager;
+        private readonly IEmailService emailService;
+
         private readonly ListingQueries listingQueries;
 
         public AccountController(ApplicationUserManager userManager,
             ApplicationSignInManager signInManager,
             IAuthenticationManager authenticationManager,
+            IEmailService emailService,
             ListingQueries listingQueries)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.authenticationManager = authenticationManager;
+            this.emailService = emailService;
             this.listingQueries = listingQueries;
         }
 
@@ -225,18 +230,16 @@ namespace Karmr.WebUI.Controllers
             if (ModelState.IsValid)
             {
                 var user = await userManager.FindByNameAsync(model.Email);
-                if (user == null || !(await userManager.IsEmailConfirmedAsync(user.Id)))
+                if (user == null /*|| !(await userManager.IsEmailConfirmedAsync(user.Id))*/)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
                     return View("ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                string code = await userManager.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { code = code }, protocol: Request.Url.Scheme);
+                await this.emailService.SendPasswordReset(user.Email, callbackUrl);
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
             // If we got this far, something failed, redisplay form
@@ -273,6 +276,7 @@ namespace Karmr.WebUI.Controllers
             var result = await userManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
+                await this.emailService.SendPasswordChangeNotification(user.Email);
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
             AddErrors(result);
