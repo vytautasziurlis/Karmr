@@ -421,6 +421,8 @@
     <Content Include="Views\Listing\Create.cshtml" />
     <Content Include="Views\Listing\Manage.cshtml" />
     <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
