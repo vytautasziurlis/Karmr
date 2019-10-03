@@ -193,6 +193,7 @@ a:hover, a:active {
 .site-navigation ul li a {
     display: block;
     padding: 16px 0;
+    border-bottom: 3px solid transparent;
     font-size: 14px;
     font-weight: 600;
     line-height: 1;
@@ -1122,8 +1123,8 @@ ul.tabs-nav .tab-nav.active {
 .single-page .page-header {
     position: relative;
     z-index: 99;
-    padding-top: 100px;
-    padding-bottom: 72px;
+    padding-top: 20px;
+    padding-bottom: 5px;
     background-size: cover !important;
 }
 
@@ -1140,8 +1141,8 @@ ul.tabs-nav .tab-nav.active {
 
 .single-page .page-header h1 {
     position: relative;
-    padding-bottom: 24px;
-    font-size: 36px;
+    padding-bottom: 9px;
+    font-size: 30px;
     font-weight: 600;
     color: #fff;
 }
