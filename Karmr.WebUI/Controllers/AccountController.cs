@@ -214,7 +214,7 @@ namespace Karmr.WebUI.Controllers
 
         #endregion
 
-        #region Forgot password / reset password
+        #region Forgot password / reset password / change password
 
         [AllowAnonymous]
         public ActionResult ForgotPassword()
@@ -285,6 +285,38 @@ namespace Karmr.WebUI.Controllers
 
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var result = await userManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                var user = await userManager.FindByIdAsync(User.Identity.GetUserId());
+                if (user != null)
+                {
+                    await signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("ChangePasswordConfirmation");
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        public ActionResult ChangePasswordConfirmation()
         {
             return View();
         }
