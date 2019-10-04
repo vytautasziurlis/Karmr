@@ -28,6 +28,7 @@
             Assert.AreEqual(command.UserId, subject.UserId);
             Assert.AreEqual(command.Name, subject.Name);
             Assert.AreEqual(command.Description, subject.Description);
+            Assert.AreEqual(command.LocationName, subject.LocationName);
             Assert.AreEqual(command.Location, subject.Location);
             Assert.AreEqual(true, subject.IsPublic);
             Assert.AreEqual(false, subject.IsArchived);
@@ -51,6 +52,7 @@
             Assert.AreEqual(command.UserId, @event.UserId);
             Assert.AreEqual(command.Name, @event.Name);
             Assert.AreEqual(command.Description, @event.Description);
+            Assert.AreEqual(command.LocationName, @event.LocationName);
             Assert.AreEqual(command.Location, @event.Location);
             Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }
@@ -98,6 +100,7 @@
                 .With(x => x.UserId, createCommand.UserId)
                 .With(x => x.Name, createCommand.Name + " tail")
                 .With(x => x.Description, createCommand.Description + " tail")
+                .With(x => x.LocationName, createCommand.LocationName + " tail")
                 .With(x => x.Location, new GeoLocation(
                     (createCommand.Location?.Latitude ?? 0) + 0.01m,
                     (createCommand.Location?.Longitude ?? 0) + 0.02m))
@@ -107,6 +110,7 @@
 
             Assert.AreEqual(updateCommand.Name, subject.Name);
             Assert.AreEqual(updateCommand.Description, subject.Description);
+            Assert.AreEqual(updateCommand.LocationName, subject.LocationName);
             Assert.AreEqual(updateCommand.Location, subject.Location);
         }
 
@@ -121,6 +125,7 @@
                 .With(x => x.UserId, createCommand.UserId)
                 .With(x => x.Name, createCommand.Name + " tail")
                 .With(x => x.Description, createCommand.Description + " tail")
+                .With(x => x.LocationName, createCommand.LocationName + " tail")
                 .With(x => x.Location, new GeoLocation(
                     (createCommand.Location?.Latitude ?? 0) + 0.01m,
                     (createCommand.Location?.Longitude ?? 0) + 0.02m))
@@ -137,6 +142,7 @@
             Assert.AreEqual(updateCommand.UserId, @event.UserId);
             Assert.AreEqual(updateCommand.Name, @event.Name);
             Assert.AreEqual(updateCommand.Description, @event.Description);
+            Assert.AreEqual(updateCommand.LocationName, @event.LocationName);
             Assert.AreEqual(updateCommand.Location, @event.Location);
             Assert.AreEqual(this.clock.UtcNow, @event.Timestamp);
         }

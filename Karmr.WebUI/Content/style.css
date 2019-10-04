@@ -865,7 +865,7 @@ ul.tabs-nav .tab-nav.active {
 }
 
 .event-content-wrap .posted-date,
-.event-content-wrap .cats-links a {
+.event-content-wrap .cats-links {
     display: block;
     position: relative;
     margin-top: 6px;
@@ -941,8 +941,8 @@ ul.tabs-nav .tab-nav.active {
     color: #262626;
 }
 
-.cause-content-wrap .posted-date a,
-.cause-content-wrap .cats-links a {
+.cause-content-wrap .posted-date,
+.cause-content-wrap .cats-links {
     display: block;
     position: relative;
     margin-top: 6px;

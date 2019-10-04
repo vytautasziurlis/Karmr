@@ -19,6 +19,8 @@ namespace Karmr.Domain.Entities
 
         internal string Description { get; private set; }
 
+        internal string LocationName { get; private set; }
+
         internal GeoLocation? Location { get; private set; }
 
         internal bool IsPublic { get; private set; }
@@ -37,7 +39,7 @@ namespace Karmr.Domain.Entities
             {
                 throw new Exception(string.Format("Expected empty list of events, found {0} events", this.Events.Count));
             }
-            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Name, command.Description, command.Location, this.Clock.UtcNow));
+            this.Raise(new ListingCreated(command.EntityKey, command.UserId, command.Name, command.Description, command.LocationName, command.Location, this.Clock.UtcNow));
         }
 
         private void Handle(UpdateListingCommand command)
@@ -50,7 +52,7 @@ namespace Karmr.Domain.Entities
             {
                 throw new Exception("Permission denied");
             }
-            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Name, command.Description, command.Location, this.Clock.UtcNow));
+            this.Raise(new ListingUpdated(command.EntityKey, command.UserId, command.Name, command.Description, command.LocationName, command.Location, this.Clock.UtcNow));
         }
 
         private void Handle(ArchiveListingCommand command)
@@ -155,6 +157,7 @@ namespace Karmr.Domain.Entities
             this.UserId = @event.UserId;
             this.Name = @event.Name;
             this.Description = @event.Description;
+            this.LocationName = @event.LocationName;
             this.Location = @event.Location;
             this.IsPublic = true;
             this.IsArchived = false;
@@ -166,6 +169,7 @@ namespace Karmr.Domain.Entities
         {
             this.Name = @event.Name;
             this.Description = @event.Description;
+            this.LocationName = @event.LocationName;
             this.Location = @event.Location;
         }
 

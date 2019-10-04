@@ -9,12 +9,15 @@ namespace Karmr.Domain.Events
 
         internal string Description { get; }
 
+        internal string LocationName { get; }
+
         internal GeoLocation? Location { get; }
 
-        public ListingUpdated(Guid entityKey, Guid userId, string name, string description, GeoLocation? location, DateTime timestamp) : base(entityKey, userId, timestamp)
+        public ListingUpdated(Guid entityKey, Guid userId, string name, string description, string locationName, GeoLocation? location, DateTime timestamp) : base(entityKey, userId, timestamp)
         {
             this.Name = name;
             this.Description = description;
+            this.LocationName = locationName;
             this.Location = location;
         }
     }

@@ -25,7 +25,7 @@ namespace Karmr.DomainUnitTests.Queries
         {
             this.subject.GetAll();
 
-            this.mockRepository.Verify(x => x.Query<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing"), Times.Once);
+            this.mockRepository.Verify(x => x.Query<Listing>("SELECT [Id], [Name], [Description], [LocationName], [Created], [Modified] FROM ReadModel.Listing"), Times.Once);
         }
         [Test]
         public void GetByUserIdCallsRepository()
@@ -34,7 +34,7 @@ namespace Karmr.DomainUnitTests.Queries
             this.subject.GetByUserId(userId);
 
             this.mockRepository.Verify(
-                x => x.Query<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [UserId] = @UserId",
+                x => x.Query<Listing>("SELECT [Id], [Name], [Description], [LocationName], [Created], [Modified] FROM ReadModel.Listing WHERE [UserId] = @UserId",
                     It.Is<object>(@params => Asserts.HaveSameProperties(new { userId }, @params))),
                 Times.Once);
         }
@@ -46,7 +46,7 @@ namespace Karmr.DomainUnitTests.Queries
             this.subject.GetById(id);
 
             this.mockRepository.Verify(
-                x => x.QuerySingle<Listing>("SELECT [Id], [Name], [Description], [Created], [Modified] FROM ReadModel.Listing WHERE [Id] = @Id",
+                x => x.QuerySingle<Listing>("SELECT [Id], [Name], [Description], [LocationName], [Created], [Modified] FROM ReadModel.Listing WHERE [Id] = @Id",
                     It.Is<object>(@params => Asserts.HaveSameProperties(new { id }, @params))),
                 Times.Once);
         }

@@ -1,4 +1,5 @@
-﻿@model Karmr.WebUI.Models.Listing.CreateListingFormModel
+﻿@using System.Configuration
+@model Karmr.WebUI.Models.Listing.CreateListingFormModel
 @{
     ViewBag.Title = "Ask for help";
     ViewBag.CurrentMenuItem = "AskHelp";
@@ -26,8 +27,12 @@
                         @Html.AntiForgeryToken()
                         <h2>Create new request</h2>
                         @Html.ValidationSummary("", new { @class = "text-danger" })
+                        @Html.HiddenFor(m => m.Latitude)
+                        @Html.HiddenFor(m => m.Longitude)
                         @Html.LabelFor(m => m.Name)
                         @Html.TextBoxFor(m => m.Name)
+                        @Html.LabelFor(m => m.LocationName)
+                        @Html.TextBoxFor(m => m.LocationName)
                         @Html.LabelFor(m => m.Description)
                         @Html.TextAreaFor(m => m.Description, new { rows = 10 })
                         <span><input class="btn gradient-bg" type="submit" value="Save"></span>
@@ -41,3 +46,22 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+<script>
+    function initPage() {
+        initAutocomplete();
+    }
+
+    function initAutocomplete() {
+        var input = document.getElementById('LocationName');
+        var searchBox = new google.maps.places.SearchBox(input);
+        searchBox.addListener('places_changed', function () {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) { return; }
+            document.getElementById('Latitude').value = places[0].geometry.location.lat();
+            document.getElementById('Longitude').value = places[0].geometry.location.lng();
+            document.getElementById('LocationName').value = places[0].formatted_address;
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleAPIKey"]&libraries=places&callback=initPage" async defer></script>

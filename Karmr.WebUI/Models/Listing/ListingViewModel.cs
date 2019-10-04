@@ -10,6 +10,8 @@ namespace Karmr.WebUI.Models.Listing
 
         public string Description { get; }
 
+        public string LocationName { get; }
+
         public DateTime Created { get; }
 
         public DateTime? Updated { get; }
@@ -19,6 +21,7 @@ namespace Karmr.WebUI.Models.Listing
             Id = listing.Id;
             Name = listing.Name;
             Description = listing.Description;
+            LocationName = listing.LocationName;
             Created = listing.Created;
             Updated = listing.Updated;
         }
