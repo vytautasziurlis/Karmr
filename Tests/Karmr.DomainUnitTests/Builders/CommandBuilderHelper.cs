@@ -16,6 +16,7 @@ namespace Karmr.DomainUnitTests.Builders
                 { "UserId", Guid.NewGuid() },
                 { "Name", "Name" },
                 { "Description", "Description" },
+                { "LocationName", "Location" },
                 { "Location", new GeoLocation(1.23m, 42.123m) }
             });
 
@@ -25,6 +26,7 @@ namespace Karmr.DomainUnitTests.Builders
                 { "UserId", Guid.NewGuid() },
                 { "Name", "Name" },
                 { "Description", "Description" },
+                { "LocationName", "Location" },
                 { "Location", new GeoLocation(1.23m, 42.123m) }
             });
 

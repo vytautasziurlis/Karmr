@@ -10,6 +10,8 @@ namespace Karmr.Domain.Queries.Models
 
         public string Description { get; }
 
+        public string LocationName { get; }
+
         public DateTime Created { get; }
 
         public DateTime? Updated { get; }

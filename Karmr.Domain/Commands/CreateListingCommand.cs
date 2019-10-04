@@ -9,12 +9,15 @@ namespace Karmr.Domain.Commands
 
         public string Description { get; }
 
+        public string LocationName { get; }
+
         public GeoLocation? Location { get; }
 
-        public CreateListingCommand(Guid userId, string name, string description, GeoLocation? location) : base(userId)
+        public CreateListingCommand(Guid userId, string name, string description, string locationName, GeoLocation? location) : base(userId)
         {
             this.Name = name;
             this.Description = description;
+            this.LocationName = locationName;
             this.Location = location;
         }
     }

@@ -12,7 +12,9 @@ namespace Karmr.WebUI.Models.Listing
         [MaxLength(4000, ErrorMessage = "Description cannot exceed 4000 characters")]
         public string Description { get; set; }
 
-        public string Location { get; set; }
+        [Display(Name = "Location")]
+        [MaxLength(1000, ErrorMessage = "Location cannot exceed 1000 characters")]
+        public string LocationName { get; set; }
 
         public decimal Latitude { get; set; }
 

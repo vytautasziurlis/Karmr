@@ -72,7 +72,7 @@ namespace Karmr.WebUI.Controllers
             {
                 var userId = Helpers.UserId(this.User);
                 var geoLocation = Helpers.GeoLocation(model.Latitude, model.Longitude); 
-                var command = new CreateListingCommand(userId, model.Name, model.Description, geoLocation);
+                var command = new CreateListingCommand(userId, model.Name, model.Description, model.LocationName, geoLocation);
                 this.commandHandler.Handle(command);
             }
             return RedirectToAction("Manage");
