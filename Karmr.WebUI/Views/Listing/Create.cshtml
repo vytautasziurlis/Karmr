@@ -32,7 +32,7 @@
                         @Html.LabelFor(m => m.Name)
                         @Html.TextBoxFor(m => m.Name)
                         @Html.LabelFor(m => m.LocationName)
-                        @Html.TextBoxFor(m => m.LocationName)
+                        @Html.TextBoxFor(m => m.LocationName, new { placeholder = "" })
                         @Html.LabelFor(m => m.Description)
                         @Html.TextAreaFor(m => m.Description, new { rows = 10 })
                         <span><input class="btn gradient-bg" type="submit" value="Save"></span>

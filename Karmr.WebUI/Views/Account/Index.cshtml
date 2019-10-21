@@ -26,7 +26,7 @@
                     <div class="event-wrap d-flex flex-wrap justify-content-between">
                         <div class="event-content-wrap">
                             <header class="entry-header d-flex flex-wrap align-items-center">
-                                <h3 class="entry-title w-100 m-0"><a href="#">@listing.Name</a></h3>
+                                <h3 class="entry-title w-100 m-0"><a href="@Url.Action("Details", "Listing", new { id = listing.Id })">@listing.Name</a></h3>
                                 <div class="posted-date">@listing.Created.ToString("MMM d, yyyy")</div>
                                 <div class="cats-links">@listing.LocationName</div>
                             </header>
@@ -34,7 +34,7 @@
                                 <p class="m-0">@listing.Description</p>
                             </div>
                             <div class="entry-footer">
-                                <a href="#">Read More</a>
+                                <a href="@Url.Action("Details", "Listing", new { id = listing.Id })">Read More</a>
                             </div>
                         </div>
                     </div>

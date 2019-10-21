@@ -1,0 +1,58 @@
+﻿@using System.Configuration
+@model Karmr.WebUI.Models.Listing.ListingDetailsViewModel
+@{
+    ViewBag.Title = "Listing Details";
+    ViewBag.CurrentMenuItem = "OfferHelp";
+    ViewBag.BodyClass = "about-page";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>Listing Details</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="contact-page-wrap">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-7">
+                <div class="entry-content">
+                    <h2>@Model.Name</h2>
+                    <div class="event-content-wrap">
+                        <header class="entry-header d-flex flex-wrap align-items-center">
+                            <div class="posted-date">@Model.Created.ToString("MMM d, yyyy")</div>
+                            <div class="cats-links">@Model.LocationName</div>
+                        </header>
+                    </div>
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="entry-content">
+                    <div id="map" style="height: 350px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function initMap() {
+        var myLatLng = { lat: @Model.Latitude, lng: @Model.Longitude };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14,
+            center: myLatLng
+        });
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Hello World!'
+        });
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@ConfigurationManager.AppSettings["GoogleAPIKey"]&callback=initMap"></script>
