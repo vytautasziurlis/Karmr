@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Karmr.Common.Contracts;
 using Karmr.Domain.Commands;
@@ -55,6 +56,7 @@ namespace Karmr.WebUI.Controllers
         {
             var listings = this.listingQueries
                 .GetByUserId(Helpers.UserId(this.User))
+                .OrderByDescending(x => x.Created)
                 .Select(x => new ListingViewModel(x));
             return View(listings);
         }
@@ -76,6 +78,13 @@ namespace Karmr.WebUI.Controllers
                 this.commandHandler.Handle(command);
             }
             return RedirectToAction("Manage");
+        }
+
+        [HttpGet]
+        public ActionResult Details(Guid id)
+        {
+            var model = new ListingDetailsViewModel(this.listingQueries.GetById(id));
+            return View(model);
         }
     }
 }

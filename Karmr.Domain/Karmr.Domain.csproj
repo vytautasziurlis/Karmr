@@ -82,7 +82,10 @@
     <Compile Include="Events\ListingCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\ListingQueries.cs" />
+    <Compile Include="Queries\Models\DiscussionPost.cs" />
+    <Compile Include="Queries\Models\DiscussionThread.cs" />
     <Compile Include="Queries\Models\Listing.cs" />
+    <Compile Include="Queries\Models\ListingDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

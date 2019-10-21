@@ -40,6 +40,7 @@ namespace Karmr.WebUI.Controllers
         {
             var listings = this.listingQueries
                 .GetByUserId(Helpers.UserId(this.User))
+                .OrderByDescending(x => x.Created)
                 .Select(x => new ListingViewModel(x));
             return View(listings);
         }

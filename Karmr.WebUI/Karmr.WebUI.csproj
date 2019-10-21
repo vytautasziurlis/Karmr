@@ -238,6 +238,7 @@
     <Compile Include="Models\Listing\CreateListingFormModel.cs" />
     <Compile Include="Models\Listing\ListingSearchFormModel.cs" />
     <Compile Include="Models\Listing\ListingSearchViewModel.cs" />
+    <Compile Include="Models\Listing\ListingDetailsViewModel.cs" />
     <Compile Include="Models\Listing\ListingViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -417,6 +418,7 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Account\ChangePasswordConfirmation.cshtml" />
+    <Content Include="Views\Listing\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
