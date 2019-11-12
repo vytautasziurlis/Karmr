@@ -41,7 +41,7 @@ namespace Karmr.Domain.Queries
                 .GroupBy(
                     x => x.ThreadId,
                     x => new {x.Id, x.ThreadId, x.UserId, x.Content, x.Created},
-                    (threadId, posts) => new DiscussionThread(threadId, posts.OrderByDescending(x => x.Created).First().UserId, posts.Select(post => new DiscussionPost(post.UserId, post.Content))))
+                    (threadId, posts) => new DiscussionThread(threadId, posts.OrderByDescending(x => x.Created).First().UserId, posts.Select(post => new DiscussionPost(post.UserId, post.Content, post.Created))))
                 .ToList();
 
             return result;

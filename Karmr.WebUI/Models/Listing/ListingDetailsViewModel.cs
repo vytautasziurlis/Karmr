@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Karmr.WebUI.Models.Listing
 {
@@ -22,6 +24,8 @@ namespace Karmr.WebUI.Models.Listing
 
         public DateTime? Updated { get; }
 
+        public IEnumerable<DiscussionThreadViewModel> DiscussionThreads { get; }
+
         public ListingDetailsViewModel(Domain.Queries.Models.ListingDetails listing)
         {
             Id = listing.Id;
@@ -33,6 +37,7 @@ namespace Karmr.WebUI.Models.Listing
             Longitude = listing.Longitude;
             Created = listing.Created;
             Updated = listing.Updated;
+            DiscussionThreads = listing.DiscussionThreads.Select(x => new DiscussionThreadViewModel(x));
         }
     }
 }
