@@ -236,6 +236,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Listing\CreateListingFormModel.cs" />
+    <Compile Include="Models\Listing\DiscussionPostViewModel.cs" />
+    <Compile Include="Models\Listing\DiscussionThreadViewModel.cs" />
     <Compile Include="Models\Listing\ListingSearchFormModel.cs" />
     <Compile Include="Models\Listing\ListingSearchViewModel.cs" />
     <Compile Include="Models\Listing\ListingDetailsViewModel.cs" />

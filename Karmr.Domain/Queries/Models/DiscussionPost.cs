@@ -8,10 +8,13 @@ namespace Karmr.Domain.Queries.Models
 
         public string Content { get; }
 
-        public DiscussionPost(Guid userId, string content)
+        public DateTime Created { get; }
+
+        public DiscussionPost(Guid userId, string content, DateTime created)
         {
             UserId = userId;
             Content = content;
+            Created = created;
         }
     }
 }

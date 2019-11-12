@@ -25,6 +25,6 @@ namespace Karmr.Domain.Queries.Models
 
         public DateTime? Updated { get; }
 
-        internal IEnumerable<DiscussionThread> DiscussionThreads { get; set; }
+        public IEnumerable<DiscussionThread> DiscussionThreads { get; internal set; }
     }
 }
